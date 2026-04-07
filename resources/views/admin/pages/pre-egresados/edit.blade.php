@@ -8,10 +8,14 @@
     @php
         $hero = $sections['preegreso_hero'] ?? null;
         $intro = $sections['preegreso_intro'] ?? null;
-        $especializaciones = $sections['preegreso_especializaciones'] ?? null;
+        $espIntro = $sections['preegreso_especializaciones_intro'] ?? null;
+        $espMat = $sections['preegreso_especializaciones_materias'] ?? null;
         $trabajos = $sections['preegreso_trabajos_grado'] ?? null;
-        $servicio = $sections['preegreso_servicio_social'] ?? null;
-        $pasos = $sections['preegreso_servicio_pasos'] ?? null;
+        $ssIntro = $sections['preegreso_servicio_social_intro'] ?? null;
+        $ssReq = $sections['preegreso_servicio_social_requisitos'] ?? null;
+        $ssObj = $sections['preegreso_servicio_social_objetivos'] ?? null;
+        $ssMod = $sections['preegreso_servicio_social_modalidades'] ?? null;
+        $ssPas = $sections['preegreso_servicio_social_pasos'] ?? null;
         $cta = $sections['preegreso_cta'] ?? null;
     @endphp
 
@@ -38,11 +42,11 @@
                 @method('PUT')
 
                 <div class="bg-white shadow rounded-2xl p-6">
-                    <h3 class="text-2xl font-bold mb-6">Hero principal</h3>
+                    <h3 class="text-2xl font-bold mb-6">Hero</h3>
                     <div class="grid grid-cols-1 gap-6">
                         <input type="text" name="hero_title" value="{{ old('hero_title', $hero->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
                         <input type="text" name="hero_subtitle" value="{{ old('hero_subtitle', $hero->subtitle ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtítulo">
-                        <textarea name="hero_content" rows="5" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('hero_content', $hero->content ?? '') }}</textarea>
+                        <textarea name="hero_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('hero_content', $hero->content ?? '') }}</textarea>
                         <input type="file" name="hero_image" accept=".jpg,.jpeg,.png,.webp" class="w-full rounded-lg border-gray-300 shadow-sm">
                         @if(!empty($hero?->image_1))
                             <img src="{{ asset('storage/' . $hero->image_1) }}" class="h-56 w-full max-w-xl object-cover rounded-xl border">
@@ -54,136 +58,92 @@
                     <h3 class="text-2xl font-bold mb-6">Introducción</h3>
                     <div class="grid grid-cols-1 gap-6">
                         <input type="text" name="intro_title" value="{{ old('intro_title', $intro->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
-                        <textarea name="intro_content" rows="5" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('intro_content', $intro->content ?? '') }}</textarea>
+                        <textarea name="intro_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('intro_content', $intro->content ?? '') }}</textarea>
                     </div>
                 </div>
 
-                <div class="bg-white shadow rounded-2xl p-6">
-                    <h3 class="text-2xl font-bold mb-6">Líneas de especialización</h3>
+                @php
+                    $simpleSections = [
+                        ['title' => 'Introducción a especializaciones', 'section' => $espIntro, 'title_name' => 'esp_intro_title', 'content_name' => 'esp_intro_content'],
+                        ['title' => 'Materias por especialización', 'section' => $espMat, 'title_name' => 'esp_mat_title', 'content_name' => 'esp_mat_content'],
+                        ['title' => 'Trabajos de grado', 'section' => $trabajos, 'title_name' => 'trabajos_title', 'content_name' => 'trabajos_content'],
+                        ['title' => 'Introducción a servicio social', 'section' => $ssIntro, 'title_name' => 'ss_intro_title', 'content_name' => 'ss_intro_content'],
+                        ['title' => 'Requisitos de servicio social', 'section' => $ssReq, 'title_name' => 'ss_req_title', 'content_name' => 'ss_req_content'],
+                        ['title' => 'Objetivos del servicio social', 'section' => $ssObj, 'title_name' => 'ss_obj_title', 'content_name' => 'ss_obj_content'],
+                        ['title' => 'Modalidades del servicio social', 'section' => $ssMod, 'title_name' => 'ss_mod_title', 'content_name' => 'ss_mod_content'],
+                        ['title' => 'Pasos del trámite', 'section' => $ssPas, 'title_name' => 'ss_pas_title', 'content_name' => 'ss_pas_content'],
+                    ];
+                @endphp
 
-                    <div class="grid grid-cols-1 gap-6 mb-8">
-                        <input type="text" name="especializaciones_title" value="{{ old('especializaciones_title', $especializaciones->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
-                        <textarea name="especializaciones_content" rows="5" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Descripción">{{ old('especializaciones_content', $especializaciones->content ?? '') }}</textarea>
+                @foreach($simpleSections as $block)
+                    <div class="bg-white shadow rounded-2xl p-6">
+                        <h3 class="text-2xl font-bold mb-6">{{ $block['title'] }}</h3>
+                        <div class="grid grid-cols-1 gap-6">
+                            <input type="text" name="{{ $block['title_name'] }}" value="{{ old($block['title_name'], $block['section']->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
+                            <textarea name="{{ $block['content_name'] }}" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old($block['content_name'], $block['section']->content ?? '') }}</textarea>
+
+                            @if($block['title_name'] === 'ss_intro_title')
+                                <input type="text" name="ss_intro_extra_1" value="{{ old('ss_intro_extra_1', $ssIntro->extra_1 ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Dato 1">
+                                <input type="text" name="ss_intro_extra_2" value="{{ old('ss_intro_extra_2', $ssIntro->extra_2 ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Dato 2">
+                            @endif
+                        </div>
                     </div>
+                @endforeach
 
-                    <div class="space-y-6">
-                        @foreach(($especializaciones?->items ?? collect()) as $item)
-                            <div class="border border-slate-200 rounded-2xl p-5">
-                                <h4 class="font-semibold text-lg mb-4">Especialización / bloque #{{ $loop->iteration }}</h4>
+                @php
+                    $itemBlocks = [
+                        ['label' => 'Líneas de especialización', 'items_name' => 'esp_intro_items', 'image_name' => 'esp_intro_images', 'section' => $espIntro, 'has_subtitle' => true, 'has_image' => true, 'has_extra_1' => false],
+                        ['label' => 'Materias por línea', 'items_name' => 'esp_mat_items', 'image_name' => null, 'section' => $espMat, 'has_subtitle' => true, 'has_image' => false, 'has_extra_1' => false],
+                        ['label' => 'Items de trabajos de grado', 'items_name' => 'trabajo_items', 'image_name' => 'trabajo_images', 'section' => $trabajos, 'has_subtitle' => false, 'has_image' => true, 'has_extra_1' => false],
+                        ['label' => 'Items de requisitos', 'items_name' => 'ss_req_items', 'image_name' => null, 'section' => $ssReq, 'has_subtitle' => true, 'has_image' => false, 'has_extra_1' => false],
+                        ['label' => 'Items de objetivos', 'items_name' => 'ss_obj_items', 'image_name' => null, 'section' => $ssObj, 'has_subtitle' => false, 'has_image' => false, 'has_extra_1' => false],
+                        ['label' => 'Items de modalidades', 'items_name' => 'ss_mod_items', 'image_name' => null, 'section' => $ssMod, 'has_subtitle' => false, 'has_image' => false, 'has_extra_1' => false],
+                        ['label' => 'Items de pasos', 'items_name' => 'ss_pas_items', 'image_name' => null, 'section' => $ssPas, 'has_subtitle' => false, 'has_image' => false, 'has_extra_1' => false],
+                    ];
+                @endphp
 
-                                <div class="grid grid-cols-1 gap-6">
-                                    <input type="text" name="especializacion_items[{{ $item->id }}][title]" value="{{ old('especializacion_items.' . $item->id . '.title', $item->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
-                                    <input type="text" name="especializacion_items[{{ $item->id }}][subtitle]" value="{{ old('especializacion_items.' . $item->id . '.subtitle', $item->subtitle) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtítulo">
-                                    <textarea name="especializacion_items[{{ $item->id }}][content]" rows="6" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('especializacion_items.' . $item->id . '.content', $item->content) }}</textarea>
-                                    <input type="text" name="especializacion_items[{{ $item->id }}][extra_1]" value="{{ old('especializacion_items.' . $item->id . '.extra_1', $item->extra_1) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Nota adicional">
+                @foreach($itemBlocks as $block)
+                    <div class="bg-white shadow rounded-2xl p-6">
+                        <h3 class="text-2xl font-bold mb-6">{{ $block['label'] }}</h3>
 
-                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                        <input type="number" min="1" name="especializacion_items[{{ $item->id }}][sort_order]" value="{{ old('especializacion_items.' . $item->id . '.sort_order', $item->sort_order) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Orden">
+                        <div class="space-y-6">
+                            @foreach(($block['section']?->items ?? collect()) as $item)
+                                <div class="border border-slate-200 rounded-2xl p-5">
+                                    <div class="grid grid-cols-1 gap-6">
+                                        <input type="text" name="{{ $block['items_name'] }}[{{ $item->id }}][title]" value="{{ old($block['items_name'].'.'.$item->id.'.title', $item->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
 
-                                        <label class="inline-flex items-center gap-2">
-                                            <input type="hidden" name="especializacion_items[{{ $item->id }}][status]" value="0">
-                                            <input type="checkbox" name="especializacion_items[{{ $item->id }}][status]" value="1" {{ old('especializacion_items.' . $item->id . '.status', $item->status) ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm">
-                                            <span class="text-sm text-gray-700">Activo</span>
-                                        </label>
+                                        @if($block['has_subtitle'])
+                                            <input type="text" name="{{ $block['items_name'] }}[{{ $item->id }}][subtitle]" value="{{ old($block['items_name'].'.'.$item->id.'.subtitle', $item->subtitle) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtítulo">
+                                        @endif
+
+                                        <textarea name="{{ $block['items_name'] }}[{{ $item->id }}][content]" rows="6" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old($block['items_name'].'.'.$item->id.'.content', $item->content) }}</textarea>
+
+                                        @if($block['has_extra_1'])
+                                            <input type="text" name="{{ $block['items_name'] }}[{{ $item->id }}][extra_1]" value="{{ old($block['items_name'].'.'.$item->id.'.extra_1', $item->extra_1) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Nota adicional">
+                                        @endif
+
+                                        @if($block['has_image'])
+                                            <input type="file" name="{{ $block['image_name'] }}[{{ $item->id }}]" accept=".jpg,.jpeg,.png,.webp" class="w-full rounded-lg border-gray-300 shadow-sm">
+                                            @if($item->image)
+                                                <img src="{{ asset('storage/' . $item->image) }}" class="h-40 w-full max-w-md object-cover rounded-xl border">
+                                            @endif
+                                        @endif
+
+                                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                            <input type="number" min="1" name="{{ $block['items_name'] }}[{{ $item->id }}][sort_order]" value="{{ old($block['items_name'].'.'.$item->id.'.sort_order', $item->sort_order) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Orden">
+
+                                            <label class="inline-flex items-center gap-2">
+                                                <input type="hidden" name="{{ $block['items_name'] }}[{{ $item->id }}][status]" value="0">
+                                                <input type="checkbox" name="{{ $block['items_name'] }}[{{ $item->id }}][status]" value="1" {{ old($block['items_name'].'.'.$item->id.'.status', $item->status) ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm">
+                                                <span class="text-sm text-gray-700">Activo</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-
-                <div class="bg-white shadow rounded-2xl p-6">
-                    <h3 class="text-2xl font-bold mb-6">Trabajos de grado</h3>
-
-                    <div class="grid grid-cols-1 gap-6 mb-8">
-                        <input type="text" name="trabajos_title" value="{{ old('trabajos_title', $trabajos->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
-                        <textarea name="trabajos_content" rows="5" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Descripción">{{ old('trabajos_content', $trabajos->content ?? '') }}</textarea>
-                    </div>
-
-                    <div class="space-y-6">
-                        @foreach(($trabajos?->items ?? collect()) as $item)
-                            <div class="border border-slate-200 rounded-2xl p-5">
-                                <div class="grid grid-cols-1 gap-6">
-                                    <input type="text" name="trabajo_items[{{ $item->id }}][title]" value="{{ old('trabajo_items.' . $item->id . '.title', $item->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
-                                    <textarea name="trabajo_items[{{ $item->id }}][content]" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('trabajo_items.' . $item->id . '.content', $item->content) }}</textarea>
-
-                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                        <input type="number" min="1" name="trabajo_items[{{ $item->id }}][sort_order]" value="{{ old('trabajo_items.' . $item->id . '.sort_order', $item->sort_order) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Orden">
-
-                                        <label class="inline-flex items-center gap-2">
-                                            <input type="hidden" name="trabajo_items[{{ $item->id }}][status]" value="0">
-                                            <input type="checkbox" name="trabajo_items[{{ $item->id }}][status]" value="1" {{ old('trabajo_items.' . $item->id . '.status', $item->status) ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm">
-                                            <span class="text-sm text-gray-700">Activo</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                <div class="bg-white shadow rounded-2xl p-6">
-                    <h3 class="text-2xl font-bold mb-6">Servicio social</h3>
-
-                    <div class="grid grid-cols-1 gap-6 mb-8">
-                        <input type="text" name="servicio_title" value="{{ old('servicio_title', $servicio->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
-                        <textarea name="servicio_content" rows="5" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Descripción">{{ old('servicio_content', $servicio->content ?? '') }}</textarea>
-                        <input type="text" name="servicio_extra_1" value="{{ old('servicio_extra_1', $servicio->extra_1 ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Dato destacado 1">
-                        <input type="text" name="servicio_extra_2" value="{{ old('servicio_extra_2', $servicio->extra_2 ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Dato destacado 2">
-                    </div>
-
-                    <div class="space-y-6">
-                        @foreach(($servicio?->items ?? collect()) as $item)
-                            <div class="border border-slate-200 rounded-2xl p-5">
-                                <div class="grid grid-cols-1 gap-6">
-                                    <input type="text" name="servicio_items[{{ $item->id }}][title]" value="{{ old('servicio_items.' . $item->id . '.title', $item->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
-                                    <input type="text" name="servicio_items[{{ $item->id }}][subtitle]" value="{{ old('servicio_items.' . $item->id . '.subtitle', $item->subtitle) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtítulo">
-                                    <textarea name="servicio_items[{{ $item->id }}][content]" rows="5" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('servicio_items.' . $item->id . '.content', $item->content) }}</textarea>
-
-                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                        <input type="number" min="1" name="servicio_items[{{ $item->id }}][sort_order]" value="{{ old('servicio_items.' . $item->id . '.sort_order', $item->sort_order) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Orden">
-
-                                        <label class="inline-flex items-center gap-2">
-                                            <input type="hidden" name="servicio_items[{{ $item->id }}][status]" value="0">
-                                            <input type="checkbox" name="servicio_items[{{ $item->id }}][status]" value="1" {{ old('servicio_items.' . $item->id . '.status', $item->status) ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm">
-                                            <span class="text-sm text-gray-700">Activo</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                <div class="bg-white shadow rounded-2xl p-6">
-                    <h3 class="text-2xl font-bold mb-6">Pasos del trámite</h3>
-
-                    <div class="grid grid-cols-1 gap-6 mb-8">
-                        <input type="text" name="pasos_title" value="{{ old('pasos_title', $pasos->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
-                        <textarea name="pasos_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Descripción">{{ old('pasos_content', $pasos->content ?? '') }}</textarea>
-                    </div>
-
-                    <div class="space-y-6">
-                        @foreach(($pasos?->items ?? collect()) as $item)
-                            <div class="border border-slate-200 rounded-2xl p-5">
-                                <div class="grid grid-cols-1 gap-6">
-                                    <input type="text" name="paso_items[{{ $item->id }}][title]" value="{{ old('paso_items.' . $item->id . '.title', $item->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
-                                    <textarea name="paso_items[{{ $item->id }}][content]" rows="5" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('paso_items.' . $item->id . '.content', $item->content) }}</textarea>
-
-                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                        <input type="number" min="1" name="paso_items[{{ $item->id }}][sort_order]" value="{{ old('paso_items.' . $item->id . '.sort_order', $item->sort_order) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Orden">
-
-                                        <label class="inline-flex items-center gap-2">
-                                            <input type="hidden" name="paso_items[{{ $item->id }}][status]" value="0">
-                                            <input type="checkbox" name="paso_items[{{ $item->id }}][status]" value="1" {{ old('paso_items.' . $item->id . '.status', $item->status) ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm">
-                                            <span class="text-sm text-gray-700">Activo</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
+                @endforeach
 
                 <div class="bg-white shadow rounded-2xl p-6">
                     <h3 class="text-2xl font-bold mb-6">CTA final</h3>

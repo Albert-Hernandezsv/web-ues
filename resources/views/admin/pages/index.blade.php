@@ -70,6 +70,22 @@
                             Edita líneas de especialización, trabajos de grado, servicio social, pasos del trámite y CTA final.
                         </p>
                 </a>
+
+                <a href="{{ route('admin.pages.alumnis.edit') }}"
+                    class="block bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 border border-gray-200 p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Alumnis</h3>
+                        <p class="text-gray-600 text-sm">
+                            Edita el encabezado de la página y administra casos de éxito de ex-estudiantes.
+                        </p>
+                </a>
+
+                <a href="{{ route('admin.pages.gallery.edit') }}"
+                    class="block bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 border border-gray-200 p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Galería</h3>
+                        <p class="text-gray-600 text-sm">
+                            Edita el encabezado de la página y administra imágenes y videos publicados.
+                        </p>
+                </a>
             </div>
         </div>
     </div>

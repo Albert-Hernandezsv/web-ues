@@ -24,6 +24,12 @@
                     } elseif ($menuPage->slug === 'descargas') {
                         $pageUrl = route('downloads.index');
                         $isActive = request()->routeIs('downloads.index');
+                    } elseif ($menuPage->slug === 'alumnis') {
+                        $pageUrl = route('alumnis.index');
+                        $isActive = request()->routeIs('alumnis.index') || request()->routeIs('alumnis.show');
+                    } elseif ($menuPage->slug === 'galeria') {
+                        $pageUrl = route('gallery.index');
+                        $isActive = request()->routeIs('gallery.index');
                     } else {
                         // Este es el caso por defecto para cualquier otro slug
                         $pageUrl = route('page.show', $menuPage->slug);

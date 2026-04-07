@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-04-2026 a las 20:00:18
+-- Tiempo de generación: 07-04-2026 a las 17:48:01
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,6 +20,34 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `web_ues`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `alumnis`
+--
+
+CREATE TABLE `alumnis` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(150) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `headline` varchar(255) DEFAULT NULL,
+  `company` varchar(255) DEFAULT NULL,
+  `summary` text DEFAULT NULL,
+  `content` longtext DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `published_at` datetime DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `alumnis`
+--
+
+INSERT INTO `alumnis` (`id`, `name`, `slug`, `headline`, `company`, `summary`, `content`, `image`, `published_at`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Nombre de ejemplo', 'nombre-de-ejemplo', 'Cargo de ejemplo', 'Empresa de ejemplo', 'Este es un ejemplo del resumen del caso de exito del alumni', 'Este es un ejemplo de la historia completa del caso de exito del alumni', 'alumnis/xpEy1VJphnbXmNV4ntOPItFoO0ditNFTPUb5XcJ4.jpg', '2026-04-07 09:31:00', 1, '2026-04-07 21:31:55', '2026-04-07 21:31:55');
 
 -- --------------------------------------------------------
 
@@ -96,6 +124,34 @@ CREATE TABLE `failed_jobs` (
   `exception` longtext NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `galleries`
+--
+
+CREATE TABLE `galleries` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `subtitle` varchar(255) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `event_date` date DEFAULT NULL,
+  `media_type` enum('image','video') NOT NULL,
+  `file_path` varchar(255) DEFAULT NULL,
+  `external_url` varchar(1000) DEFAULT NULL,
+  `sort_order` int(11) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `galleries`
+--
+
+INSERT INTO `galleries` (`id`, `title`, `subtitle`, `location`, `event_date`, `media_type`, `file_path`, `external_url`, `sort_order`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Nuestra Universidad', 'Edificio de la universidad', 'Facultad Multidisciplinaria de El Salvador', '2026-04-07', 'image', 'gallery/GQsBWhqKlhG6l4x1Tm1ecYiz4ETB8NGqvCJDuoid.jpg', NULL, 1, 1, '2026-04-07 21:47:38', '2026-04-07 21:47:38');
 
 -- --------------------------------------------------------
 
@@ -186,7 +242,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (7, '2026_04_02_153351_create_news_table', 1),
 (8, '2026_04_02_160806_add_menu_fields_to_pages_table', 1),
 (9, '2026_04_02_164353_create_page_section_items_table', 2),
-(10, '2026_04_02_220322_create_downloads_table', 3);
+(10, '2026_04_02_220322_create_downloads_table', 3),
+(11, '2026_04_07_152107_create_alumnis_table', 4),
+(12, '2026_04_07_153847_create_galleries_table', 5);
 
 -- --------------------------------------------------------
 
@@ -245,7 +303,9 @@ INSERT INTO `pages` (`id`, `name`, `slug`, `title`, `status`, `show_in_menu`, `m
 (5, 'Perfil de egresado', 'perfil_egresado', 'Perfil de egresado', 1, 1, 3, '2026-04-02 21:06:53', '2026-04-02 21:06:53'),
 (6, 'Contacto', 'contacto', 'Contacto', 1, 1, 6, '2026-04-02 21:24:43', '2026-04-02 21:24:43'),
 (7, 'Descargas', 'descargas', 'Descargas', 1, 1, 7, '2026-04-02 22:04:24', '2026-04-02 22:04:24'),
-(8, 'Pre-egresados', 'pre-egresados', 'Pre-egresados', 1, 1, 8, '2026-04-02 22:22:08', '2026-04-02 22:22:08');
+(8, 'Pre-egresados', 'pre-egresados', 'Pre-egresados', 1, 1, 8, '2026-04-02 22:22:08', '2026-04-02 22:22:08'),
+(10, 'Alumnis', 'alumnis', 'Alumnis', 1, 1, 9, '2026-04-07 15:22:13', '2026-04-07 15:22:13'),
+(11, 'Galería', 'galeria', 'Galería', 1, 1, 10, '2026-04-07 15:39:54', '2026-04-07 15:39:54');
 
 -- --------------------------------------------------------
 
@@ -300,7 +360,7 @@ INSERT INTO `page_sections` (`id`, `page_id`, `section_key`, `section_name`, `ti
 (17, 5, 'perfil_hero', 'Hero Perfil', 'Perfil de egresado', 'Formación para responder a los desafíos del entorno tecnológico', 'Conoce las competencias, capacidades y características que distinguen al profesional formado en Ingeniería en Desarrollo de Software.', 'sections/perfil/ZRUsNiHi0oledguLhlWUYjtE03zHmo3oQSndbofU.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-02 21:07:03', '2026-04-03 03:12:22'),
 (18, 5, 'perfil_intro', 'Introducción', 'Una formación orientada a la solución de problemas', NULL, 'La carrera busca formar ingenieros capaces de mejorar, proponer y aplicar de manera eficiente y efectiva sus conocimientos en la solución de problemas mediante el análisis, diseño, construcción, implantación, mantenimiento y administración de software complejo, promoviendo además la competitividad, la ética, la colaboración y la responsabilidad social.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-02 21:07:03', '2026-04-02 21:07:03'),
 (19, 5, 'perfil_competencias', 'Competencias', 'Competencias y capacidades del profesional', NULL, 'Estas competencias reflejan el alcance formativo y el tipo de soluciones que puede desarrollar el futuro profesional.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 1, '2026-04-02 21:07:03', '2026-04-02 21:07:03'),
-(20, 5, 'perfil_expectativas', 'Expectativas del mercado', 'Expectativas actuales del entorno laboral', NULL, 'Las demandas del mercado global requieren profesionales versátiles, técnicos, analíticos y capaces de trabajar en equipos multidisciplinarios.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, 1, '2026-04-02 21:07:03', '2026-04-02 21:07:03'),
+(20, 5, 'perfil_expectativas', 'Expectativas del mercado', 'Expectativas actuales del entorno laboral', NULL, 'El entorno laboral actual exige profesionales altamente adaptables, con pensamiento crítico, habilidades técnicas sólidas y capacidad para integrarse en equipos multidisciplinarios. La globalización y la transformación digital demandan especialistas capaces de innovar, resolver problemas complejos y utilizar tecnologías emergentes para generar valor en las organizaciones.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, 1, '2026-04-02 21:07:03', '2026-04-07 20:36:36'),
 (21, 5, 'perfil_aspirante', 'Perfil del aspirante', 'Características deseables del aspirante', NULL, 'El aspirante ideal a la carrera debe contar con capacidades y actitudes que favorezcan su desarrollo académico y profesional.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, 1, '2026-04-02 21:07:03', '2026-04-02 21:07:03'),
 (22, 5, 'perfil_egresado', 'Perfil profesional del egresado', 'Perfil profesional del egresado', NULL, 'El egresado de Ingeniería en Desarrollo de Software es un profesional con capacidad de desarrollar, implementar y administrar software aplicativo, mejorando la productividad, operatividad y gestión de las organizaciones. Cuenta con visión para desarrollar soluciones aplicando procesos, modelos, estándares y herramientas de calidad, y está calificado para planear, diseñar, evaluar, controlar, instalar, integrar, construir, administrar y mantener soluciones innovadoras en aplicaciones de tecnología de información y software.', NULL, NULL, NULL, NULL, 'Ver plan de estudios', 'plan_estudio', NULL, NULL, NULL, 6, 1, '2026-04-02 21:07:03', '2026-04-03 03:14:52'),
 (23, 6, 'contacto_hero', 'Hero Contacto', 'Contáctanos', 'Estamos para ayudarte', 'Ponte en contacto con la carrera de Ingeniería en Desarrollo de Software de la Facultad Multidisciplinaria de Occidente. Aquí encontrarás nuestros canales oficiales de comunicación y ubicación.', 'sections/contacto/aLK9gGFMDoQv79lBPaRoP63ceTdjKEEOkOz3550A.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-02 21:24:51', '2026-04-03 03:28:31'),
@@ -310,13 +370,21 @@ INSERT INTO `page_sections` (`id`, `page_id`, `section_key`, `section_name`, `ti
 (27, 6, 'contacto_cta', 'CTA final', 'Comunícate con nosotros', NULL, 'Estamos comprometidos con brindarte información clara y oportuna sobre la carrera, su proceso de ingreso y sus oportunidades de formación.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, 1, '2026-04-02 21:24:51', '2026-04-02 21:24:51'),
 (28, 7, 'downloads_hero', 'Hero Descargas', 'Descargas', 'Documentos y recursos disponibles', 'En esta sección encontrarás archivos y documentos de interés relacionados con la carrera, disponibles para su consulta y descarga.', 'sections/descargas/5rSXKzVhFYZOgBbv8A01ob1CpQzS4uwjFqWqsMYH.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-02 22:04:46', '2026-04-03 04:13:18'),
 (29, 7, 'downloads_intro', 'Introducción Descargas', 'Recursos disponibles', NULL, 'Accede a documentos informativos, formularios, guías, archivos académicos y otros recursos importantes disponibles para descarga.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-02 22:04:46', '2026-04-02 22:04:46'),
-(30, 8, 'preegreso_hero', 'Hero Pre-egresados', 'Pre-egresados', 'Información clave para estudiantes avanzados de la carrera', 'En esta sección encontrarás información importante sobre líneas de especialización, trabajos de grado y servicio social para estudiantes que ya cursan etapas avanzadas de Ingeniería en Desarrollo de Software.', 'sections/preegresados/MQewtychnkDGEio2G5z1P33R6vG1NPY9UkOxDb15.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-02 22:22:24', '2026-04-03 04:33:31'),
-(31, 8, 'preegreso_intro', 'Introducción', 'Información para tu etapa final de formación', NULL, 'Aquí podrás conocer las líneas de especialización, las modalidades de trabajos de grado y los requisitos para iniciar y tramitar tu servicio social dentro de la Facultad Multidisciplinaria de Occidente.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-02 22:22:24', '2026-04-02 22:22:24'),
-(32, 8, 'preegreso_especializaciones', 'Líneas de especialización', 'Líneas de especialización', NULL, 'Las líneas de especialización se desbloquean al llegar a cuarto año. Al elegir la primera materia electiva, el estudiante define la línea que continuará cursando. En 2025 se ofertaron Diseño de Software y Desarrollo de Software. Por demanda, podría ofertarse solo una línea en determinado período.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 1, '2026-04-02 22:22:24', '2026-04-03 04:33:31'),
-(33, 8, 'preegreso_trabajos_grado', 'Trabajos de grado', 'Opciones de trabajos de grado', NULL, 'Entre las modalidades disponibles se contemplan tesis, pasantías, monografías, proyectos de innovación tecnológica, apoyo en el centro de investigaciones multidisciplinario y cursos de especialización. Para su oferta, es importante estar pendiente de las publicaciones en redes sociales y por este medio.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, 1, '2026-04-02 22:22:24', '2026-04-02 22:22:24'),
-(34, 8, 'preegreso_servicio_social', 'Servicio social', 'Servicio social', NULL, 'El servicio social es una actividad retributiva, obligatoria y prioritariamente gratuita, realizada en beneficio de la sociedad antes de obtener el título académico. En ingeniería, su duración es de 500 horas y debe realizarse en un mínimo de 3 meses y un máximo de 18 meses calendario.', NULL, NULL, NULL, NULL, NULL, NULL, '500 horas', 'Mínimo 3 meses / máximo 18 meses', NULL, 5, 1, '2026-04-02 22:22:24', '2026-04-03 04:33:31'),
-(35, 8, 'preegreso_servicio_pasos', 'Pasos servicio social', 'Pasos para iniciar el trámite de servicio social', NULL, 'Antes de iniciar, el estudiante debe verificar en su expediente que tiene acreditado al menos el 60% de unidades valorativas de la carrera.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 6, 1, '2026-04-02 22:22:24', '2026-04-03 04:33:31'),
-(36, 8, 'preegreso_cta', 'CTA final', 'Mantente pendiente de los avisos oficiales', NULL, 'Para procesos de especialización, trabajos de grado y servicio social, revisa con frecuencia este sitio, la sección de descargas y las redes sociales oficiales de la carrera.', NULL, NULL, NULL, NULL, 'Ir a descargas', 'descargas', NULL, NULL, NULL, 7, 1, '2026-04-02 22:22:24', '2026-04-03 04:33:31');
+(59, 8, 'preegreso_hero', 'Hero Pre-egresados', 'Pre-egresados', 'Información clave para estudiantes avanzados de la carrera', 'Conoce las líneas de especialización, trabajos de grado y requisitos del servicio social para estudiantes de Ingeniería en Desarrollo de Software.', 'sections/preegresados/0N9CTMzMQkI0AtxH0GpNXFMA6IoAI9UabpvC4nTa.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-07 14:59:52', '2026-04-07 21:11:44'),
+(60, 8, 'preegreso_intro', 'Introducción', 'Información para tu etapa final de formación', NULL, 'Esta sección reúne información importante para estudiantes que ya cursan etapas avanzadas de la carrera y necesitan orientación sobre especializaciones, trabajos de grado y servicio social.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-07 14:59:52', '2026-04-07 14:59:52'),
+(61, 8, 'preegreso_especializaciones_intro', 'Introducción especializaciones', 'Líneas de especialización', NULL, 'Las líneas de especialización se desbloquean al llegar a cuarto año. La primera materia electiva que el estudiante curse define la línea que continuará. En 2025 se ofertaron dos líneas: Diseño de Software y Desarrollo de Software. También debe considerarse que, por demanda mayoritaria, podría ofertarse solo una línea.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 1, '2026-04-07 14:59:52', '2026-04-07 14:59:52'),
+(62, 8, 'preegreso_especializaciones_materias', 'Materias por especialización', 'Materias por línea de especialización', NULL, 'A continuación se detallan las materias que corresponden a cada línea según el pensum 2021.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, 1, '2026-04-07 14:59:52', '2026-04-07 14:59:52'),
+(63, 8, 'preegreso_trabajos_grado', 'Trabajos de grado', 'Trabajos de grado', NULL, 'Las opciones de trabajos de grado incluyen varias modalidades académicas y profesionales. Para su oferta, debes estar pendiente de publicaciones en redes sociales y por este medio.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, 1, '2026-04-07 14:59:52', '2026-04-07 14:59:52'),
+(64, 8, 'preegreso_servicio_social_intro', 'Introducción servicio social', 'Servicio social', NULL, 'El Reglamento General de Proyección Social de la Universidad de El Salvador define el servicio social como la actividad retributiva, obligatoria y prioritariamente gratuita que realiza todo estudiante en beneficio de la sociedad, previo a obtener el título académico.', NULL, NULL, NULL, NULL, NULL, NULL, '500 horas', 'Mínimo 3 meses / máximo 18 meses', NULL, 6, 1, '2026-04-07 14:59:52', '2026-04-07 14:59:52'),
+(65, 8, 'preegreso_servicio_social_requisitos', 'Requisitos servicio social', 'Requisitos para iniciar servicio social', NULL, 'Estos requisitos deben cumplirse antes de iniciar el trámite correspondiente.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 7, 1, '2026-04-07 14:59:52', '2026-04-07 14:59:52'),
+(66, 8, 'preegreso_servicio_social_objetivos', 'Objetivos servicio social', 'Objetivos del servicio social', NULL, 'El servicio social busca fortalecer la relación entre la formación universitaria y la sociedad.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 8, 1, '2026-04-07 14:59:52', '2026-04-07 14:59:52'),
+(67, 8, 'preegreso_servicio_social_modalidades', 'Modalidades servicio social', 'Modalidades del servicio social', NULL, 'En la FMOcc UES se contemplan distintas modalidades aprobadas para desarrollar el servicio social.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 9, 1, '2026-04-07 14:59:52', '2026-04-07 14:59:52'),
+(68, 8, 'preegreso_servicio_social_pasos', 'Pasos servicio social', 'Pasos para iniciar y realizar el trámite del servicio social', NULL, 'Antes de iniciar, debes verificar en tu expediente que tienes acreditado al menos el 60% de unidades valorativas de la carrera.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 10, 1, '2026-04-07 14:59:52', '2026-04-07 14:59:52'),
+(69, 8, 'preegreso_cta', 'CTA final', 'Mantente pendiente de los avisos oficiales', NULL, 'Para procesos de especialización, trabajos de grado y servicio social, revisa con frecuencia este sitio, la sección de descargas y las redes sociales oficiales de la carrera.', NULL, NULL, NULL, NULL, 'Ir a descargas', 'descargas', NULL, NULL, NULL, 11, 1, '2026-04-07 14:59:52', '2026-04-07 21:11:44'),
+(70, 10, 'alumnis_hero', 'Hero Alumnis', 'Alumnis', 'Historias que inspiran', 'Conoce casos de éxito de ex-estudiantes de Ingeniería en Desarrollo de Software y descubre cómo su formación académica ha impactado su vida profesional.', 'sections/alumnis/g4OKCTYVYFW0e0GC1B7EMIPQaZozovyjRxdoRME9.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-07 15:22:26', '2026-04-07 21:30:42'),
+(71, 10, 'alumnis_intro', 'Introducción Alumnis', 'Casos de éxito', NULL, 'En esta sección compartimos experiencias, trayectorias y logros de graduados que han destacado en distintos ámbitos profesionales.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-07 15:22:26', '2026-04-07 15:22:26'),
+(72, 11, 'gallery_hero', 'Hero Galería', 'Galería', 'Momentos, actividades y experiencias', 'Explora imágenes y videos de actividades, eventos y espacios relacionados con la carrera Ingeniería en Desarrollo de Software.', 'sections/galeria/uTAmjqhe5CRcvrojpcP91IiKrwMs7FrJI23WQh85.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-07 15:40:05', '2026-04-07 21:46:43'),
+(73, 11, 'gallery_intro', 'Introducción Galería', 'Contenido multimedia', NULL, 'En esta sección podrás encontrar material visual de actividades académicas, eventos institucionales, visitas, exposiciones y otros momentos importantes de la carrera.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-07 15:40:05', '2026-04-07 15:40:05');
 
 -- --------------------------------------------------------
 
@@ -389,8 +457,8 @@ INSERT INTO `page_section_items` (`id`, `page_section_id`, `title`, `subtitle`, 
 (41, 18, 'Organización y compromiso', NULL, 'Organización y alto sentido de compromiso.', NULL, NULL, NULL, NULL, NULL, 7, 1, '2026-04-02 21:07:36', '2026-04-02 21:07:36'),
 (42, 20, 'Diseño de Software', 'Especialización 1', 'Se centra en la arquitectura de sistemas complejos, el modelado y el diseño de arquitecturas eficientes para mejorar la experiencia del usuario y el rendimiento del software en proyectos innovadores.', NULL, NULL, 'Puede ofertarse o no según demanda', NULL, NULL, 1, 1, '2026-04-02 22:22:40', '2026-04-02 22:22:40'),
 (43, 20, 'Desarrollo de Software', 'Especialización 2', 'Se centra en implementar y optimizar aplicaciones con tecnologías emergentes, fortaleciendo habilidades en computación en la nube, machine learning y seguridad para crear soluciones innovadoras.', NULL, NULL, 'Puede ofertarse o no según demanda', NULL, NULL, 2, 1, '2026-04-02 22:22:40', '2026-04-02 22:22:40'),
-(44, 20, 'Ciclo VII al X', 'Diseño de Software', 'Ciclo VII: Compiladores (CMP135). Prerrequisito: GPO135.\r\nCiclo VIII: Dinámica de Sistemas (DSI135) y Desarrollo de Software Dirigido por Modelos (DSM135). Prerrequisito: CMP135.\r\nCiclo IX: Gestión y Programación de Sistemas Operativos en Red (GPR135) y Arquitectura de la Información Web (AIW135). Prerrequisitos: DSI135 y DSM135.\r\nCiclo X: Arquitectura de Software (ARS135). Prerrequisitos: GPR135 y AIW135.', NULL, NULL, NULL, NULL, NULL, 3, 1, '2026-04-02 22:22:50', '2026-04-02 22:22:50'),
-(45, 20, 'Ciclo VII al X', 'Desarrollo de Software', 'Ciclo VII: Desarrollo y Técnicas de Aplicaciones Web (DTW135). Prerrequisito: DAW135.\r\nCiclo VIII: Computación en la Nube (CPN135) y Machine Learning (MCH135). Prerrequisito: DTW135.\r\nCiclo IX: Seguridad en el Desarrollo de Software (SDS135) e Informática Industrial (IFN135). Prerrequisitos: CPN135 y MCH135.\r\nCiclo X: Desarrollo y Reutilización de Software (DRS135). Prerrequisitos: SDS135 e IFN135.', NULL, NULL, NULL, NULL, NULL, 4, 1, '2026-04-02 22:22:50', '2026-04-02 22:22:50'),
+(44, 20, 'Ciclo VII al X', 'Diseño de Software', 'Ciclo VII: Compiladores (CMP135).\r\nPrerrequisito: GPO135.\r\n\r\nCiclo VIII: Dinámica de Sistemas (DSI135) y Desarrollo de Software Dirigido por Modelos (DSM135).\r\nPrerrequisito: CMP135.\r\n\r\nCiclo IX: Gestión y Programación de Sistemas Operativos en Red (GPR135) y Arquitectura de la Información Web (AIW135).\r\nPrerrequisitos: DSI135 y DSM135.\r\n\r\nCiclo X: Arquitectura de Software (ARS135).\r\nPrerrequisitos: GPR135 y AIW135.', NULL, NULL, NULL, NULL, NULL, 3, 1, '2026-04-02 22:22:50', '2026-04-07 20:36:36'),
+(45, 20, 'Ciclo VII al X', 'Desarrollo de Software', 'Ciclo VII: Desarrollo y Técnicas de Aplicaciones Web (DTW135).\r\nPrerrequisito: DAW135.\r\n\r\nCiclo VIII: Computación en la Nube (CPN135) y Machine Learning (MCH135).\r\nPrerrequisito: DTW135.\r\n\r\nCiclo IX: Seguridad en el Desarrollo de Software (SDS135) e Informática Industrial (IFN135).\r\nPrerrequisitos: CPN135 y MCH135.\r\n\r\nCiclo X: Desarrollo y Reutilización de Software (DRS135).\r\nPrerrequisitos: SDS135 e IFN135.', NULL, NULL, NULL, NULL, NULL, 4, 1, '2026-04-02 22:22:50', '2026-04-07 20:36:36'),
 (46, 21, 'Tesis', NULL, 'Modalidad formal de investigación y desarrollo académico.', NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-02 22:23:19', '2026-04-02 22:23:19'),
 (47, 21, 'Pasantías', NULL, 'Experiencia práctica supervisada en instituciones u organizaciones.', NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-02 22:23:19', '2026-04-02 22:23:19'),
 (48, 21, 'Monografías', NULL, 'Desarrollo documental y analítico sobre un tema específico.', NULL, NULL, NULL, NULL, NULL, 3, 1, '2026-04-02 22:23:19', '2026-04-02 22:23:19'),
@@ -401,11 +469,30 @@ INSERT INTO `page_section_items` (`id`, `page_section_id`, `title`, `subtitle`, 
 (53, 22, 'Requisito 2', 'Aprobación de Proyección Social', 'Tener la aprobación del jefe o jefa de la Unidad de Proyección Social. Esto se legaliza mediante Carta de Asignación al Proyecto o Programa, delimitando la fecha de inicio del servicio social.', NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-02 22:23:29', '2026-04-02 22:23:29'),
 (54, 22, 'Objetivos del servicio social', 'Objetivos', 'Contribuir al desarrollo y transformación de la sociedad, potenciar la formación académica del futuro profesional y fortalecer su humanización y conciencia social.', NULL, NULL, NULL, NULL, NULL, 3, 1, '2026-04-02 22:23:29', '2026-04-02 22:23:29'),
 (55, 22, 'Modalidades', 'Modalidades aprobadas', 'Virtual, presencial y semipresencial.', NULL, NULL, NULL, NULL, NULL, 4, 1, '2026-04-02 22:23:29', '2026-04-02 22:23:29'),
-(56, 35, 'Paso 1', NULL, 'Descargar la hoja de inscripción para realizar el servicio social en la sección de descargas.', NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-02 22:24:31', '2026-04-02 22:24:31'),
-(57, 35, 'Paso 2', NULL, 'Enviar la hoja de inscripción y la carta de la institución donde realizará el servicio social al correo institucional del coordinador o coordinadora de la Subunidad de Proyección Social correspondiente, con un máximo de 10 días hábiles antes de iniciar. Luego agregar la solicitud institucional y, si aplica, la declaración jurada del estudiante.', NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-02 22:24:31', '2026-04-02 22:24:31'),
-(58, 35, 'Paso 3', NULL, 'Presentar el proyecto de servicio social en un período máximo de 15 días hábiles después de iniciado el proyecto.', NULL, NULL, NULL, NULL, NULL, 3, 1, '2026-04-02 22:24:31', '2026-04-02 22:24:31'),
-(59, 35, 'Paso 4', NULL, 'Entenderse con el docente tutor del servicio social y llevar el respectivo control de asesorías.', NULL, NULL, NULL, NULL, NULL, 4, 1, '2026-04-02 22:24:31', '2026-04-02 22:24:31'),
-(60, 35, 'Nota importante', NULL, 'Ningún servicio social es retroactivo. Nadie está autorizado a realizarlo sin haber hecho el trámite respectivo en el departamento académico correspondiente.', NULL, NULL, NULL, NULL, NULL, 5, 1, '2026-04-02 22:24:31', '2026-04-03 04:33:31');
+(63, 61, 'Diseño de Software', 'Línea 1', 'Se centra en la arquitectura de sistemas complejos, aprendiendo modelado y diseñando arquitecturas eficientes para mejorar la experiencia del usuario y el rendimiento del software en proyectos innovadores.', 'sections/preegresados/xprBaXHuDcQsfLqHlP28EAPATpBEq68qv8cZT178.webp', NULL, NULL, NULL, NULL, 1, 1, '2026-04-07 15:02:33', '2026-04-07 21:11:44'),
+(64, 61, 'Desarrollo de Software', 'Línea 2', 'Se centra en implementar y optimizar aplicaciones con tecnologías emergentes, desarrollando habilidades en computación en la nube, machine learning y seguridad para crear soluciones innovadoras.', 'sections/preegresados/jdV0SHt4SInnoDJTdelU39zKYE4wYc81FvF9lWuD.jpg', NULL, NULL, NULL, NULL, 2, 1, '2026-04-07 15:02:33', '2026-04-07 21:11:44'),
+(65, 62, 'Diseño de Software', 'Materias por ciclo', 'Ciclo VII:\r\n35 - Compiladores (CMP135)\r\nPrerrequisito: GPO135\r\n\r\nCiclo VIII:\r\n39 - Dinámica de Sistemas (DSI135)\r\nPrerrequisito: CMP135\r\n40 - Desarrollo de Software Dirigido por Modelos (DSM135)\r\nPrerrequisito: CMP135\r\n\r\nCiclo IX:\r\n44 - Gestión y Programación de Sistemas Operativos en Red (GPR135)\r\nPrerrequisitos: DSI135, DSM135\r\n45 - Arquitectura de la Información Web (AIW135)\r\nPrerrequisitos: DSI135, DSM135\r\n\r\nCiclo X:\r\n50 - Arquitectura de Software (ARS135)\r\nPrerrequisitos: GPR135, AIW135', NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-07 15:02:50', '2026-04-07 15:02:50'),
+(66, 62, 'Desarrollo de Software', 'Materias por ciclo', 'Ciclo VII:\r\n35 - Desarrollo y Técnicas de Aplicaciones Web (DTW135)\r\nPrerrequisito: DAW135\r\n\r\nCiclo VIII:\r\n39 - Computación en la Nube (CPN135)\r\nPrerrequisito: DTW135\r\n40 - Machine Learning (MCH135)\r\nPrerrequisito: DTW135\r\n\r\nCiclo IX:\r\n44 - Seguridad en el Desarrollo de Software (SDS135)\r\nPrerrequisitos: CPN135, MCH135\r\n45 - Informática Industrial (IFN135)\r\nPrerrequisitos: CPN135, MCH135\r\n\r\nCiclo X:\r\n50 - Desarrollo y Reutilización de Software (DRS135)\r\nPrerrequisitos: SDS135, IFN135', NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-07 15:02:50', '2026-04-07 15:02:50'),
+(67, 63, 'Tesis', NULL, 'Modalidad formal de investigación y desarrollo académico.', 'sections/preegresados/BNCYQ3V1526PO1GIAu4V9FoACXdqSu1Vfm6h4mXu.jpg', NULL, NULL, NULL, NULL, 1, 1, '2026-04-07 15:03:06', '2026-04-07 21:11:44'),
+(68, 63, 'Pasantías profesionales', NULL, 'Experiencia práctica supervisada en instituciones u organizaciones.', 'sections/preegresados/3C8PZrbaCDT2QkbajkzPZnQC9kEamf1Bl5mkuodo.png', NULL, NULL, NULL, NULL, 2, 1, '2026-04-07 15:03:06', '2026-04-07 21:11:45'),
+(69, 63, 'Monografías', NULL, 'Trabajo documental y analítico sobre un tema específico.', 'sections/preegresados/36BRXfz1NILqD1qWLL86lcNqx8hi4CGRz0kwK2ET.jpg', NULL, NULL, NULL, NULL, 3, 1, '2026-04-07 15:03:06', '2026-04-07 21:11:45'),
+(70, 63, 'Proyectos de innovación tecnológica', NULL, 'Proyectos orientados a soluciones innovadoras con base tecnológica.', 'sections/preegresados/SB9TCHkoi0u8TGi3Gww2Al0eSROuY47vgXs9z6rg.jpg', NULL, NULL, NULL, NULL, 4, 1, '2026-04-07 15:03:06', '2026-04-07 21:11:45'),
+(71, 63, 'Apoyo en el centro de investigación multidisciplinario', NULL, 'Participación en proyectos vinculados a investigación y apoyo institucional.', 'sections/preegresados/0fXkZfvov2vx79CSNPiqz0va3HcwCUr9KkxNn5wO.png', NULL, NULL, NULL, NULL, 5, 1, '2026-04-07 15:03:06', '2026-04-07 21:11:45'),
+(72, 63, 'Cursos de especialización', NULL, 'Alternativa académica según la oferta vigente.', 'sections/preegresados/owqp05bvutl2Dvoada9kOHxF3VsqNLZF7DrI3XnL.jpg', NULL, NULL, NULL, NULL, 6, 1, '2026-04-07 15:03:06', '2026-04-07 21:11:45'),
+(73, 65, 'Requisito 1', '60% de unidades valorativas', 'Haber cursado como mínimo el 60% de unidades valorativas de la carrera y contar con la respectiva constancia emitida por la Administración Académica de la Facultad. Para uso interno se verifica en sistema Prometeo; para uso externo se utiliza constancia de nivel de estudio o avance de plan de estudio.', NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-07 15:03:21', '2026-04-07 15:03:21'),
+(74, 65, 'Requisito 2', 'Aprobación de Proyección Social', 'Tener la aprobación del o la jefe(a) de la Unidad de Proyección Social. Esto se legaliza con Carta de Asignación al Proyecto o Programa, donde se delimita la fecha de inicio del Servicio Social.', NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-07 15:03:21', '2026-04-07 15:03:21'),
+(75, 66, 'Objetivo 1', NULL, 'Contribuir al desarrollo y transformación de la sociedad, especialmente a los sectores más vulnerables con la formación académica de los y las estudiantes de la UES.', NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-07 15:03:37', '2026-04-07 15:03:37'),
+(76, 66, 'Objetivo 2', NULL, 'Potenciar la formación académica del futuro profesional mediante la interacción con la sociedad.', NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-07 15:03:37', '2026-04-07 15:03:37'),
+(77, 66, 'Objetivo 3', NULL, 'Fortalecer la humanización y conciencia social del futuro profesional de la UES.', NULL, NULL, NULL, NULL, NULL, 3, 1, '2026-04-07 15:03:37', '2026-04-07 15:03:37'),
+(78, 67, 'Virtual', NULL, 'Modalidad aprobada por la FMOcc UES para realizar servicio social.', NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-07 15:04:01', '2026-04-07 15:04:01'),
+(79, 67, 'Presencial', NULL, 'Modalidad aprobada por la FMOcc UES para realizar servicio social.', NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-07 15:04:01', '2026-04-07 15:04:01'),
+(80, 67, 'Semipresencial', NULL, 'Modalidad aprobada por la FMOcc UES para realizar servicio social.', NULL, NULL, NULL, NULL, NULL, 3, 1, '2026-04-07 15:04:01', '2026-04-07 15:04:01'),
+(81, 67, 'Tutorías y proyectos', NULL, 'También se puede realizar servicio social apoyando en tutorías, en proyectos universitarios internos o externos, según se vayan consiguiendo y ofertando los proyectos.', NULL, NULL, NULL, NULL, NULL, 4, 1, '2026-04-07 15:04:01', '2026-04-07 15:04:01'),
+(82, 68, 'Paso 1', NULL, 'Descargar la hoja de inscripción para realizar el servicio social en la sección descargas.', NULL, NULL, NULL, NULL, NULL, 1, 1, '2026-04-07 15:04:18', '2026-04-07 15:04:18'),
+(83, 68, 'Paso 2', NULL, 'Enviar la hoja de inscripción de servicio social y la carta de la institución donde realizará el servicio social al correo institucional del coordinador(a) de la Subunidad de Proyección Social del departamento académico correspondiente, en un período máximo de 10 días hábiles antes de iniciar. Luego agregar la solicitud institucional con los datos del estudiante y actividades, y cuando se apruebe, enviar la hoja de inscripción y la declaración jurada si aplica.', NULL, NULL, NULL, NULL, NULL, 2, 1, '2026-04-07 15:04:18', '2026-04-07 15:04:18'),
+(84, 68, 'Paso 3', NULL, 'Presentar el proyecto de servicio social en un período máximo de 15 días hábiles después de iniciado el proyecto. El formato puede descargarse en la sección descargas.', NULL, NULL, NULL, NULL, NULL, 3, 1, '2026-04-07 15:04:18', '2026-04-07 15:04:18'),
+(85, 68, 'Paso 4', NULL, 'Entenderse con el docente tutor del servicio social y llevar control de asesorías.', NULL, NULL, NULL, NULL, NULL, 4, 1, '2026-04-07 15:04:18', '2026-04-07 15:04:18'),
+(86, 68, 'Nota importante', NULL, 'Ningún servicio social es retroactivo. Nadie está autorizado a realizarlo sin haber completado el trámite respectivo en el departamento académico correspondiente. Además, de preferencia, todos los trámites deberán realizarse en modalidad virtual hasta nuevo aviso.', NULL, NULL, NULL, NULL, NULL, 5, 1, '2026-04-07 15:04:18', '2026-04-07 15:04:18');
 
 -- --------------------------------------------------------
 
@@ -439,7 +526,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('l6VMySIdwxPjoEmRK5d0o34LbSNMDVhdDRu0xNrE', 1, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiclJ0VjJUQlNZWGtZTGpGQ2dXUmhZQkNwcUtmSFBVaXBpeDNZWjBHOSI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDU6Imh0dHA6Ly9sb2NhbGhvc3Qvd2ViLXVlcy9wdWJsaWMvcHJlLWVncmVzYWRvcyI7czo1OiJyb3V0ZSI7czo5OiJwYWdlLnNob3ciO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1775239089);
+('fs73gH2GmA7CYVmQrjgl7aO9njOqD7V319S5IEIP', 1, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiZzQzU3ZhV0Vyd3E4QXIyRGVxUU5WU2FiWHVGd213WWtxM1dCbDI5NyI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NTI6Imh0dHA6Ly9sb2NhbGhvc3Qvd2ViLXVlcy9wdWJsaWMvYWRtaW4vZ2FsZXJpYS8xL2VkaXQiO3M6NToicm91dGUiO3M6MTg6ImFkbWluLmdhbGxlcnkuZWRpdCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1775576867);
 
 -- --------------------------------------------------------
 
@@ -470,6 +557,13 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 --
 
 --
+-- Indices de la tabla `alumnis`
+--
+ALTER TABLE `alumnis`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `alumnis_slug_unique` (`slug`);
+
+--
 -- Indices de la tabla `cache`
 --
 ALTER TABLE `cache`
@@ -495,6 +589,12 @@ ALTER TABLE `downloads`
 ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
+-- Indices de la tabla `galleries`
+--
+ALTER TABLE `galleries`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `home_slider_items`
@@ -576,6 +676,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `alumnis`
+--
+ALTER TABLE `alumnis`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de la tabla `downloads`
 --
 ALTER TABLE `downloads`
@@ -586,6 +692,12 @@ ALTER TABLE `downloads`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `galleries`
+--
+ALTER TABLE `galleries`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `home_slider_items`
@@ -603,7 +715,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT de la tabla `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `news`
@@ -615,19 +727,19 @@ ALTER TABLE `news`
 -- AUTO_INCREMENT de la tabla `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `page_sections`
 --
 ALTER TABLE `page_sections`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT de la tabla `page_section_items`
 --
 ALTER TABLE `page_section_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT de la tabla `users`

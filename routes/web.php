@@ -15,6 +15,12 @@ use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\Admin\DescargasPageAdminController;
 use App\Http\Controllers\Admin\DownloadAdminController;
 use App\Http\Controllers\Admin\PreEgresadosPageAdminController;
+use App\Http\Controllers\AlumniController;
+use App\Http\Controllers\Admin\AlumnisPageAdminController;
+use App\Http\Controllers\Admin\AlumniAdminController;
+use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\Admin\GalleryPageAdminController;
+use App\Http\Controllers\Admin\GalleryAdminController;
 
 Route::middleware(['auth'])->group(function () {
 
@@ -66,6 +72,16 @@ Route::middleware(['auth'])->group(function () {
     // Pre-egresados
     Route::get('/gestionar-paginas-base/pre-egresados', [PreEgresadosPageAdminController::class, 'edit'])->name('admin.pages.preegreso.edit');
     Route::put('/gestionar-paginas-base/pre-egresados', [PreEgresadosPageAdminController::class, 'update'])->name('admin.pages.preegreso.update');
+
+    // Alumnis
+    Route::get('/gestionar-paginas-base/alumnis', [AlumnisPageAdminController::class, 'edit'])->name('admin.pages.alumnis.edit');
+    Route::put('/gestionar-paginas-base/alumnis', [AlumnisPageAdminController::class, 'update'])->name('admin.pages.alumnis.update');
+    Route::resource('/admin/alumnis', AlumniAdminController::class)->parameters(['alumnis' => 'alumni'])->names('admin.alumnis')->except(['show']);
+
+    // Galería
+    Route::get('/gestionar-paginas-base/galeria', [GalleryPageAdminController::class, 'edit'])->name('admin.pages.gallery.edit');
+    Route::put('/gestionar-paginas-base/galeria', [GalleryPageAdminController::class, 'update'])->name('admin.pages.gallery.update');
+    Route::resource('/admin/galeria', GalleryAdminController::class)->parameters(['galeria' => 'gallery'])->names('admin.gallery')->except(['show']);
 });
 
 
@@ -75,5 +91,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/noticias', [NewsController::class, 'index'])->name('news.index');
 Route::get('/descargas', [DownloadController::class, 'index'])->name('downloads.index');
 Route::get('/descargas/archivo/{download}', [DownloadController::class, 'file'])->name('downloads.file');
+Route::get('/alumnis', [AlumniController::class, 'index'])->name('alumnis.index');
+Route::get('/galeria', [GalleryController::class, 'index'])->name('gallery.index');
+Route::get('/alumnis/{slug}', [AlumniController::class, 'show'])->name('alumnis.show');
 Route::get('/noticias/{slug}', [NewsController::class, 'show'])->name('news.show');
 Route::get('/{slug}', [HomeController::class, 'show'])->name('page.show');
