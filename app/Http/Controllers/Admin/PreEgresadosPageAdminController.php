@@ -41,12 +41,6 @@ class PreEgresadosPageAdminController extends Controller
             'intro_title' => ['nullable', 'string', 'max:255'],
             'intro_content' => ['nullable', 'string'],
 
-            'esp_intro_title' => ['nullable', 'string', 'max:255'],
-            'esp_intro_content' => ['nullable', 'string'],
-
-            'esp_mat_title' => ['nullable', 'string', 'max:255'],
-            'esp_mat_content' => ['nullable', 'string'],
-
             'trabajos_title' => ['nullable', 'string', 'max:255'],
             'trabajos_content' => ['nullable', 'string'],
 
@@ -71,21 +65,6 @@ class PreEgresadosPageAdminController extends Controller
             'cta_content' => ['nullable', 'string'],
             'cta_button_text' => ['nullable', 'string', 'max:100'],
             'cta_button_link' => ['nullable', 'string', 'max:255'],
-
-            'esp_intro_items' => ['nullable', 'array'],
-            'esp_intro_items.*.title' => ['nullable', 'string', 'max:255'],
-            'esp_intro_items.*.subtitle' => ['nullable', 'string', 'max:255'],
-            'esp_intro_items.*.content' => ['nullable', 'string'],
-            'esp_intro_images.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'esp_intro_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
-            'esp_intro_items.*.status' => ['nullable', 'boolean'],
-
-            'esp_mat_items' => ['nullable', 'array'],
-            'esp_mat_items.*.title' => ['nullable', 'string', 'max:255'],
-            'esp_mat_items.*.subtitle' => ['nullable', 'string', 'max:255'],
-            'esp_mat_items.*.content' => ['nullable', 'string'],
-            'esp_mat_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
-            'esp_mat_items.*.status' => ['nullable', 'boolean'],
 
             'trabajo_items' => ['nullable', 'array'],
             'trabajo_items.*.title' => ['nullable', 'string', 'max:255'],
@@ -122,8 +101,6 @@ class PreEgresadosPageAdminController extends Controller
 
         $hero = PageSection::where('page_id', $page->id)->where('section_key', 'preegreso_hero')->firstOrFail();
         $intro = PageSection::where('page_id', $page->id)->where('section_key', 'preegreso_intro')->firstOrFail();
-        $espIntro = PageSection::where('page_id', $page->id)->where('section_key', 'preegreso_especializaciones_intro')->firstOrFail();
-        $espMat = PageSection::where('page_id', $page->id)->where('section_key', 'preegreso_especializaciones_materias')->firstOrFail();
         $trabajos = PageSection::where('page_id', $page->id)->where('section_key', 'preegreso_trabajos_grado')->firstOrFail();
         $ssIntro = PageSection::where('page_id', $page->id)->where('section_key', 'preegreso_servicio_social_intro')->firstOrFail();
         $ssReq = PageSection::where('page_id', $page->id)->where('section_key', 'preegreso_servicio_social_requisitos')->firstOrFail();
@@ -146,14 +123,6 @@ class PreEgresadosPageAdminController extends Controller
         $intro->title = $request->intro_title;
         $intro->content = $request->intro_content;
         $intro->save();
-
-        $espIntro->title = $request->esp_intro_title;
-        $espIntro->content = $request->esp_intro_content;
-        $espIntro->save();
-
-        $espMat->title = $request->esp_mat_title;
-        $espMat->content = $request->esp_mat_content;
-        $espMat->save();
 
         $trabajos->title = $request->trabajos_title;
         $trabajos->content = $request->trabajos_content;
@@ -187,8 +156,6 @@ class PreEgresadosPageAdminController extends Controller
         $cta->button_link = $request->cta_button_link;
         $cta->save();
 
-        $this->updateItems($request, 'esp_intro_items', 'esp_intro_images');
-        $this->updateItems($request, 'esp_mat_items');
         $this->updateItems($request, 'trabajo_items', 'trabajo_images');
         $this->updateItems($request, 'ss_req_items');
         $this->updateItems($request, 'ss_obj_items');
@@ -197,7 +164,7 @@ class PreEgresadosPageAdminController extends Controller
 
         return redirect()
             ->route('admin.pages.preegreso.edit')
-            ->with('success', 'La página Pre-egresados se actualizó correctamente.');
+            ->with('success', 'La pagina Egresados parte 2 se actualizo correctamente.');
     }
 
     private function updateItems(Request $request, string $field, ?string $imageField = null): void

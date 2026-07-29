@@ -47,6 +47,12 @@ class PlanEstudioPageAdminController extends Controller
             'summary_extra_2' => ['nullable', 'string', 'max:255'],
             'summary_subtitle' => ['nullable', 'string', 'max:255'],
 
+            'esp_intro_title' => ['nullable', 'string', 'max:255'],
+            'esp_intro_content' => ['nullable', 'string'],
+
+            'esp_mat_title' => ['nullable', 'string', 'max:255'],
+            'esp_mat_content' => ['nullable', 'string'],
+
             'areas_title' => ['nullable', 'string', 'max:255'],
             'areas_content' => ['nullable', 'string'],
 
@@ -57,6 +63,21 @@ class PlanEstudioPageAdminController extends Controller
             'cta_content' => ['nullable', 'string'],
             'cta_button_text' => ['nullable', 'string', 'max:100'],
             'cta_button_link' => ['nullable', 'string', 'max:255'],
+
+            'esp_intro_items' => ['nullable', 'array'],
+            'esp_intro_items.*.title' => ['nullable', 'string', 'max:255'],
+            'esp_intro_items.*.subtitle' => ['nullable', 'string', 'max:255'],
+            'esp_intro_items.*.content' => ['nullable', 'string'],
+            'esp_intro_images.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'esp_intro_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
+            'esp_intro_items.*.status' => ['nullable', 'boolean'],
+
+            'esp_mat_items' => ['nullable', 'array'],
+            'esp_mat_items.*.title' => ['nullable', 'string', 'max:255'],
+            'esp_mat_items.*.subtitle' => ['nullable', 'string', 'max:255'],
+            'esp_mat_items.*.content' => ['nullable', 'string'],
+            'esp_mat_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
+            'esp_mat_items.*.status' => ['nullable', 'boolean'],
 
             'area_items' => ['nullable', 'array'],
             'area_items.*.title' => ['nullable', 'string', 'max:255'],
@@ -74,6 +95,8 @@ class PlanEstudioPageAdminController extends Controller
         $hero = PageSection::where('page_id', $page->id)->where('section_key', 'plan_hero')->firstOrFail();
         $intro = PageSection::where('page_id', $page->id)->where('section_key', 'plan_intro')->firstOrFail();
         $summary = PageSection::where('page_id', $page->id)->where('section_key', 'plan_summary')->firstOrFail();
+        $specializations = PageSection::where('page_id', $page->id)->where('section_key', 'plan_especializaciones_intro')->firstOrFail();
+        $specializationSubjects = PageSection::where('page_id', $page->id)->where('section_key', 'plan_especializaciones_materias')->firstOrFail();
         $areas = PageSection::where('page_id', $page->id)->where('section_key', 'plan_areas')->firstOrFail();
         $cycles = PageSection::where('page_id', $page->id)->where('section_key', 'plan_cycles')->firstOrFail();
         $cta = PageSection::where('page_id', $page->id)->where('section_key', 'plan_cta')->firstOrFail();
@@ -101,6 +124,14 @@ class PlanEstudioPageAdminController extends Controller
         $summary->subtitle = $request->summary_subtitle;
         $summary->save();
 
+        $specializations->title = $request->esp_intro_title;
+        $specializations->content = $request->esp_intro_content;
+        $specializations->save();
+
+        $specializationSubjects->title = $request->esp_mat_title;
+        $specializationSubjects->content = $request->esp_mat_content;
+        $specializationSubjects->save();
+
         $areas->title = $request->areas_title;
         $areas->content = $request->areas_content;
         $areas->save();
@@ -114,6 +145,9 @@ class PlanEstudioPageAdminController extends Controller
         $cta->button_text = $request->cta_button_text;
         $cta->button_link = $request->cta_button_link;
         $cta->save();
+
+        $this->updateItems($request, $specializations, 'esp_intro_items', 'esp_intro_images', 'sections/plan');
+        $this->updateItems($request, $specializationSubjects, 'esp_mat_items');
 
         foreach ($request->input('area_items', []) as $id => $item) {
             $row = PageSectionItem::where('page_section_id', $areas->id)->where('id', $id)->first();
@@ -140,5 +174,41 @@ class PlanEstudioPageAdminController extends Controller
         return redirect()
             ->route('admin.pages.plan.edit')
             ->with('success', 'La página Plan de estudios se actualizó correctamente.');
+    }
+
+    private function updateItems(
+        Request $request,
+        PageSection $section,
+        string $field,
+        ?string $imageField = null,
+        string $imagePath = 'sections/plan'
+    ): void {
+        $items = $request->input($field, []);
+        $images = $imageField ? $request->file($imageField, []) : [];
+
+        foreach ($items as $id => $item) {
+            $row = PageSectionItem::where('page_section_id', $section->id)
+                ->where('id', $id)
+                ->first();
+
+            if (!$row) {
+                continue;
+            }
+
+            $row->title = $item['title'] ?? null;
+            $row->subtitle = $item['subtitle'] ?? null;
+            $row->content = $item['content'] ?? null;
+            $row->sort_order = $item['sort_order'] ?? 1;
+            $row->status = isset($item['status']) ? (bool) $item['status'] : false;
+
+            if ($imageField && isset($images[$id])) {
+                if ($row->image && Storage::disk('public')->exists($row->image)) {
+                    Storage::disk('public')->delete($row->image);
+                }
+                $row->image = $images[$id]->store($imagePath, 'public');
+            }
+
+            $row->save();
+        }
     }
 }

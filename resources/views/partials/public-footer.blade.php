@@ -14,19 +14,6 @@
         </div>
 
         <div>
-            <h3 class="public-footer-title">Navegación</h3>
-            <ul class="public-footer-links">
-                @foreach($menuPages as $menuPage)
-                    <li>
-                        <a href="{{ $menuPage->slug === 'inicio' ? route('home') : route('page.show', $menuPage->slug) }}">
-                            {{ $menuPage->name }}
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-
-        <div>
             <h3 class="public-footer-title">Contacto institucional</h3>
             <p class="public-footer-text">
                 Facultad Multidisciplinaria de Occidente<br>

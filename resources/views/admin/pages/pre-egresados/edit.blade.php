@@ -1,15 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Editar Pre-egresados
+            Editar Egresados parte 2
         </h2>
     </x-slot>
 
     @php
         $hero = $sections['preegreso_hero'] ?? null;
         $intro = $sections['preegreso_intro'] ?? null;
-        $espIntro = $sections['preegreso_especializaciones_intro'] ?? null;
-        $espMat = $sections['preegreso_especializaciones_materias'] ?? null;
         $trabajos = $sections['preegreso_trabajos_grado'] ?? null;
         $ssIntro = $sections['preegreso_servicio_social_intro'] ?? null;
         $ssReq = $sections['preegreso_servicio_social_requisitos'] ?? null;
@@ -44,8 +42,8 @@
                 <div class="bg-white shadow rounded-2xl p-6">
                     <h3 class="text-2xl font-bold mb-6">Hero</h3>
                     <div class="grid grid-cols-1 gap-6">
-                        <input type="text" name="hero_title" value="{{ old('hero_title', $hero->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
-                        <input type="text" name="hero_subtitle" value="{{ old('hero_subtitle', $hero->subtitle ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtítulo">
+                        <input type="text" name="hero_title" value="{{ old('hero_title', $hero->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo">
+                        <input type="text" name="hero_subtitle" value="{{ old('hero_subtitle', $hero->subtitle ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtitulo">
                         <textarea name="hero_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('hero_content', $hero->content ?? '') }}</textarea>
                         <input type="file" name="hero_image" accept=".jpg,.jpeg,.png,.webp" class="w-full rounded-lg border-gray-300 shadow-sm">
                         @if(!empty($hero?->image_1))
@@ -55,23 +53,21 @@
                 </div>
 
                 <div class="bg-white shadow rounded-2xl p-6">
-                    <h3 class="text-2xl font-bold mb-6">Introducción</h3>
+                    <h3 class="text-2xl font-bold mb-6">Introduccion</h3>
                     <div class="grid grid-cols-1 gap-6">
-                        <input type="text" name="intro_title" value="{{ old('intro_title', $intro->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
+                        <input type="text" name="intro_title" value="{{ old('intro_title', $intro->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo">
                         <textarea name="intro_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('intro_content', $intro->content ?? '') }}</textarea>
                     </div>
                 </div>
 
                 @php
                     $simpleSections = [
-                        ['title' => 'Introducción a especializaciones', 'section' => $espIntro, 'title_name' => 'esp_intro_title', 'content_name' => 'esp_intro_content'],
-                        ['title' => 'Materias por especialización', 'section' => $espMat, 'title_name' => 'esp_mat_title', 'content_name' => 'esp_mat_content'],
                         ['title' => 'Trabajos de grado', 'section' => $trabajos, 'title_name' => 'trabajos_title', 'content_name' => 'trabajos_content'],
-                        ['title' => 'Introducción a servicio social', 'section' => $ssIntro, 'title_name' => 'ss_intro_title', 'content_name' => 'ss_intro_content'],
+                        ['title' => 'Introduccion a servicio social', 'section' => $ssIntro, 'title_name' => 'ss_intro_title', 'content_name' => 'ss_intro_content'],
                         ['title' => 'Requisitos de servicio social', 'section' => $ssReq, 'title_name' => 'ss_req_title', 'content_name' => 'ss_req_content'],
                         ['title' => 'Objetivos del servicio social', 'section' => $ssObj, 'title_name' => 'ss_obj_title', 'content_name' => 'ss_obj_content'],
                         ['title' => 'Modalidades del servicio social', 'section' => $ssMod, 'title_name' => 'ss_mod_title', 'content_name' => 'ss_mod_content'],
-                        ['title' => 'Pasos del trámite', 'section' => $ssPas, 'title_name' => 'ss_pas_title', 'content_name' => 'ss_pas_content'],
+                        ['title' => 'Pasos del tramite', 'section' => $ssPas, 'title_name' => 'ss_pas_title', 'content_name' => 'ss_pas_content'],
                     ];
                 @endphp
 
@@ -79,7 +75,7 @@
                     <div class="bg-white shadow rounded-2xl p-6">
                         <h3 class="text-2xl font-bold mb-6">{{ $block['title'] }}</h3>
                         <div class="grid grid-cols-1 gap-6">
-                            <input type="text" name="{{ $block['title_name'] }}" value="{{ old($block['title_name'], $block['section']->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
+                            <input type="text" name="{{ $block['title_name'] }}" value="{{ old($block['title_name'], $block['section']->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo">
                             <textarea name="{{ $block['content_name'] }}" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old($block['content_name'], $block['section']->content ?? '') }}</textarea>
 
                             @if($block['title_name'] === 'ss_intro_title')
@@ -92,8 +88,6 @@
 
                 @php
                     $itemBlocks = [
-                        ['label' => 'Líneas de especialización', 'items_name' => 'esp_intro_items', 'image_name' => 'esp_intro_images', 'section' => $espIntro, 'has_subtitle' => true, 'has_image' => true, 'has_extra_1' => false],
-                        ['label' => 'Materias por línea', 'items_name' => 'esp_mat_items', 'image_name' => null, 'section' => $espMat, 'has_subtitle' => true, 'has_image' => false, 'has_extra_1' => false],
                         ['label' => 'Items de trabajos de grado', 'items_name' => 'trabajo_items', 'image_name' => 'trabajo_images', 'section' => $trabajos, 'has_subtitle' => false, 'has_image' => true, 'has_extra_1' => false],
                         ['label' => 'Items de requisitos', 'items_name' => 'ss_req_items', 'image_name' => null, 'section' => $ssReq, 'has_subtitle' => true, 'has_image' => false, 'has_extra_1' => false],
                         ['label' => 'Items de objetivos', 'items_name' => 'ss_obj_items', 'image_name' => null, 'section' => $ssObj, 'has_subtitle' => false, 'has_image' => false, 'has_extra_1' => false],
@@ -110,10 +104,10 @@
                             @foreach(($block['section']?->items ?? collect()) as $item)
                                 <div class="border border-slate-200 rounded-2xl p-5">
                                     <div class="grid grid-cols-1 gap-6">
-                                        <input type="text" name="{{ $block['items_name'] }}[{{ $item->id }}][title]" value="{{ old($block['items_name'].'.'.$item->id.'.title', $item->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
+                                        <input type="text" name="{{ $block['items_name'] }}[{{ $item->id }}][title]" value="{{ old($block['items_name'].'.'.$item->id.'.title', $item->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo">
 
                                         @if($block['has_subtitle'])
-                                            <input type="text" name="{{ $block['items_name'] }}[{{ $item->id }}][subtitle]" value="{{ old($block['items_name'].'.'.$item->id.'.subtitle', $item->subtitle) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtítulo">
+                                            <input type="text" name="{{ $block['items_name'] }}[{{ $item->id }}][subtitle]" value="{{ old($block['items_name'].'.'.$item->id.'.subtitle', $item->subtitle) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtitulo">
                                         @endif
 
                                         <textarea name="{{ $block['items_name'] }}[{{ $item->id }}][content]" rows="6" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old($block['items_name'].'.'.$item->id.'.content', $item->content) }}</textarea>
@@ -148,10 +142,10 @@
                 <div class="bg-white shadow rounded-2xl p-6">
                     <h3 class="text-2xl font-bold mb-6">CTA final</h3>
                     <div class="grid grid-cols-1 gap-6">
-                        <input type="text" name="cta_title" value="{{ old('cta_title', $cta->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título">
+                        <input type="text" name="cta_title" value="{{ old('cta_title', $cta->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo">
                         <textarea name="cta_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('cta_content', $cta->content ?? '') }}</textarea>
-                        <input type="text" name="cta_button_text" value="{{ old('cta_button_text', $cta->button_text ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Texto botón">
-                        <input type="text" name="cta_button_link" value="{{ old('cta_button_link', $cta->button_link ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Link botón">
+                        <input type="text" name="cta_button_text" value="{{ old('cta_button_text', $cta->button_text ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Texto boton">
+                        <input type="text" name="cta_button_link" value="{{ old('cta_button_link', $cta->button_link ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Link boton">
                     </div>
                 </div>
 

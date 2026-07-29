@@ -3,7 +3,6 @@
 @section('content')
     @php
         $homeInfo = $sections['home_info'] ?? null;
-        $homePlan = $sections['home_plan'] ?? null;
         $homeNews = $sections['home_news'] ?? null;
     @endphp
 
@@ -53,8 +52,6 @@
         <section class="home-section">
             <div class="public-container">
                 <div class="home-info-grid">
-
-                    <!-- CONTENIDO PRINCIPAL -->
                     <div class="home-card">
                         <div class="home-info-content">
                             <span class="home-section-badge">Ingeniería en Desarrollo de Software</span>
@@ -65,10 +62,7 @@
                         </div>
                     </div>
 
-                    <!-- SIDEBAR DERECHA -->
                     <div class="home-right-sidebar">
-
-                        <!-- IMÁGENES -->
                         <div class="home-side-images">
                             <a href="{{ $homeInfo->image_1_link ?? '#' }}" class="home-side-image-link">
                                 @if($homeInfo->image_1)
@@ -83,20 +77,18 @@
 
                             <a href="{{ $homeInfo->image_2_link ?? '#' }}" class="home-side-image-link">
                                 @if($homeInfo->image_2)
-                                    <img src="{{ asset('storage/' . $homeInfo->image_2) }}" alt="Perfil de egresado">
+                                    <img src="{{ asset('storage/' . $homeInfo->image_2) }}" alt="Egresados">
                                 @else
                                     <div class="home-empty-image"></div>
                                 @endif
                                 <div class="home-side-image-overlay">
-                                    <span class="home-side-image-label">Perfil de egresado</span>
+                                    <span class="home-side-image-label">Egresados</span>
                                 </div>
                             </a>
                         </div>
 
-                        <!-- NOTICIAS -->
                         @if($homeNews)
                             <div class="home-news-sidebar">
-
                                 <div class="home-news-header">
                                     <h3 class="home-news-title">{{ $homeNews->title }}</h3>
                                 </div>
@@ -110,52 +102,44 @@
                                         </article>
                                     @endforeach
                                 </div>
-
                             </div>
                         @endif
-
-                    </div>
-
-                </div>
-            </div>
-        </section>
-    @endif
-
-    @if($homePlan)
-        <section class="home-section pt-0">
-            <div class="public-container">
-                <div class="home-plan">
-                    <div class="home-plan-grid">
-                        <div>
-                            <span class="home-section-badge home-section-badge--light">
-                                Formación académica
-                            </span>
-
-                            <h2 class="home-plan-title">{{ $homePlan->title }}</h2>
-
-                            <p class="home-plan-text">
-                                {!! nl2br(e($homePlan->content)) !!}
-                            </p>
-
-                            @if($homePlan->button_text && $homePlan->button_link)
-                                <a href="{{ $homePlan->button_link }}" class="home-plan-button">
-                                    {{ $homePlan->button_text }}
-                                </a>
-                            @endif
-                        </div>
-
-                        <div>
-                            <ul class="home-plan-list">
-                                @if($homePlan->extra_1)<li>{{ $homePlan->extra_1 }}</li>@endif
-                                @if($homePlan->extra_2)<li>{{ $homePlan->extra_2 }}</li>@endif
-                                @if($homePlan->extra_3)<li>{{ $homePlan->extra_3 }}</li>@endif
-                            </ul>
-                        </div>
                     </div>
                 </div>
             </div>
         </section>
     @endif
+
+    <section class="home-section pt-0">
+        <div class="public-container">
+            <div class="home-org-structure">
+                <div>
+                    <span class="home-section-badge home-section-badge--light">
+                        Estructura organizativa
+                    </span>
+
+                    <h2 class="home-org-title">Organización académica de la carrera</h2>
+
+                    <p class="home-org-text">
+                        La carrera se articula mediante una estructura de coordinación académica que acompaña la
+                        gestión, seguimiento y desarrollo de las asignaturas.
+                    </p>
+                </div>
+
+                <div class="home-org-chart" aria-label="Estructura organizativa de la carrera">
+                    <div class="home-org-node home-org-node--lead">Jefe de departamento</div>
+                    &nbsp;
+                    <div class="home-org-node">Coordinador de carrera</div>
+                    &nbsp;
+                    <div class="home-org-node">Coordinador de área</div>
+                    &nbsp;
+                    <div class="home-org-node">Coordinador de asignatura</div>
+                    &nbsp;
+                    <div class="home-org-node home-org-node--base">Tutores</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script>
         (() => {
@@ -163,6 +147,7 @@
             const dots = document.querySelectorAll('.home-slider-dot');
             let currentSlide = 0;
             let sliderInterval = null;
+            const sliderDelay = 9000;
 
             function showSlide(index) {
                 slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
@@ -175,13 +160,13 @@
             }
 
             if (slides.length > 1) {
-                sliderInterval = setInterval(nextSlide, 5000);
+                sliderInterval = setInterval(nextSlide, sliderDelay);
 
                 dots.forEach((dot, index) => {
                     dot.addEventListener('click', () => {
                         showSlide(index);
                         clearInterval(sliderInterval);
-                        sliderInterval = setInterval(nextSlide, 5000);
+                        sliderInterval = setInterval(nextSlide, sliderDelay);
                     });
                 });
             }

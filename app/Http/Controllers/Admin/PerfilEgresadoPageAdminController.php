@@ -147,6 +147,6 @@ class PerfilEgresadoPageAdminController extends Controller
 
         return redirect()
             ->route('admin.pages.perfil.edit')
-            ->with('success', 'La página Perfil de egresado se actualizó correctamente.');
+            ->with('success', 'La pagina Egresados parte 1 se actualizo correctamente.');
     }
 }

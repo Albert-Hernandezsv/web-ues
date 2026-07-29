@@ -13,6 +13,11 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
 // Register the Composer autoloader...
 require __DIR__.'/../vendor/autoload.php';
 
+if (str_starts_with($_SERVER['REQUEST_URI'] ?? '', '/web-ues')
+    && str_contains($_SERVER['SCRIPT_NAME'] ?? '', '/web-ues/public/index.php')) {
+    $_SERVER['SCRIPT_NAME'] = '/web-ues/index.php';
+}
+
 // Bootstrap Laravel and handle the request...
 /** @var Application $app */
 $app = require_once __DIR__.'/../bootstrap/app.php';

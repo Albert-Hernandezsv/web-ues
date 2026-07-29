@@ -4,8 +4,6 @@
     @php
         $hero = $sections['preegreso_hero'] ?? null;
         $intro = $sections['preegreso_intro'] ?? null;
-        $espIntro = $sections['preegreso_especializaciones_intro'] ?? null;
-        $espMaterias = $sections['preegreso_especializaciones_materias'] ?? null;
         $trabajos = $sections['preegreso_trabajos_grado'] ?? null;
         $ssIntro = $sections['preegreso_servicio_social_intro'] ?? null;
         $ssReq = $sections['preegreso_servicio_social_requisitos'] ?? null;
@@ -19,8 +17,8 @@
         <section class="page-hero page-hero--preegreso">
             <div class="public-container page-hero-grid">
                 <div>
-                    <span class="page-breadcrumb">Inicio / Pre-egresados</span>
-                    <h1 class="page-hero-title">{{ $hero->title }}</h1>
+                    <span class="page-breadcrumb">Inicio / Egresados</span>
+                    <h1 class="page-hero-title">Egresados</h1>
                     @if($hero->subtitle)
                         <p class="page-hero-subtitle">{{ $hero->subtitle }}</p>
                     @endif
@@ -43,61 +41,6 @@
                     <span class="home-section-badge">Etapa final</span>
                     <h2 class="page-section-title">{{ $intro->title }}</h2>
                     <p class="page-section-text">{!! nl2br(e($intro->content)) !!}</p>
-                </div>
-            </div>
-        </section>
-    @endif
-
-    @if($espIntro)
-        <section class="page-section pt-0">
-            <div class="public-container">
-                <div class="section-heading">
-                    <span class="home-section-badge">Especializaciones</span>
-                    <h2 class="page-section-title">{{ $espIntro->title }}</h2>
-                    <p class="page-section-text">{!! nl2br(e($espIntro->content)) !!}</p>
-                </div>
-
-                @if($espIntro->items->count())
-                    <div class="preegreso-grid">
-                        @foreach($espIntro->items as $item)
-                            <article class="preegreso-card">
-                                @if($item->subtitle)
-                                    <span class="preegreso-card-badge">{{ $item->subtitle }}</span>
-                                @endif
-                                @if($item->image)
-                                    <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->title }}" class="preegreso-card-image">
-                                @endif
-                                <h3 class="preegreso-card-title">{{ $item->title }}</h3>
-                                <p class="preegreso-card-text">{!! nl2br(e($item->content)) !!}</p>
-                            </article>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
-        </section>
-    @endif
-
-    @if($espMaterias && $espMaterias->items->count())
-        <section class="page-section pt-0">
-            <div class="public-container">
-                <div class="section-heading">
-                    <span class="home-section-badge">Pensum por línea</span>
-                    <h2 class="page-section-title">{{ $espMaterias->title }}</h2>
-                    <p class="page-section-text">{!! nl2br(e($espMaterias->content)) !!}</p>
-                </div>
-
-                <div class="preegreso-grid">
-                    @foreach($espMaterias->items as $item)
-                        <article class="preegreso-card">
-                            <h3 class="preegreso-card-title">{{ $item->title }}</h3>
-                            @if($item->subtitle)
-                                <p class="preegreso-card-note">{{ $item->subtitle }}</p>
-                            @endif
-                            <div class="plan-cycle-content" style="padding:0; margin-top: 1rem;">
-                                {!! nl2br(e($item->content)) !!}
-                            </div>
-                        </article>
-                    @endforeach
                 </div>
             </div>
         </section>
@@ -212,7 +155,7 @@
         <section class="page-section pt-0">
             <div class="public-container">
                 <div class="section-heading">
-                    <span class="home-section-badge">Trámite</span>
+                    <span class="home-section-badge">Tramite</span>
                     <h2 class="page-section-title">{{ $ssPas->title }}</h2>
                     <p class="page-section-text">{!! nl2br(e($ssPas->content)) !!}</p>
                 </div>

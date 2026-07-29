@@ -14,8 +14,8 @@
         <section class="page-hero page-hero--perfil">
             <div class="public-container page-hero-grid">
                 <div>
-                    <span class="page-breadcrumb">Inicio / Perfil de egresado</span>
-                    <h1 class="page-hero-title">{{ $hero->title }}</h1>
+                    <span class="page-breadcrumb">Inicio / Egresados</span>
+                    <h1 class="page-hero-title">Egresados</h1>
 
                     @if($hero->subtitle)
                         <p class="page-hero-subtitle">{{ $hero->subtitle }}</p>

@@ -41,7 +41,7 @@
 
                 <a href="{{ route('admin.pages.perfil.edit') }}"
                     class="block bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 border border-gray-200 p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Perfil de egresado</h3>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Egresados parte 1</h3>
                         <p class="text-gray-600 text-sm">
                             Edita el hero, introducción, competencias, expectativas del mercado, perfil del aspirante y perfil profesional del egresado.
                         </p>
@@ -65,9 +65,9 @@
 
                 <a href="{{ route('admin.pages.preegreso.edit') }}"
                     class="block bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 border border-gray-200 p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Pre-egresados</h3>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Egresados parte 2</h3>
                         <p class="text-gray-600 text-sm">
-                            Edita líneas de especialización, trabajos de grado, servicio social, pasos del trámite y CTA final.
+                            Edita trabajos de grado, servicio social, pasos del tramite y CTA final.
                         </p>
                 </a>
 

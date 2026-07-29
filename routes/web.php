@@ -95,4 +95,9 @@ Route::get('/alumnis', [AlumniController::class, 'index'])->name('alumnis.index'
 Route::get('/galeria', [GalleryController::class, 'index'])->name('gallery.index');
 Route::get('/alumnis/{slug}', [AlumniController::class, 'show'])->name('alumnis.show');
 Route::get('/noticias/{slug}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/egresados', [HomeController::class, 'egresados'])->name('egresados.index');
+Route::get('/egresados-parte-1', fn () => redirect()->route('egresados.index', status: 301));
+Route::get('/egresados-parte-2', fn () => redirect()->route('egresados.index', status: 301));
+Route::get('/perfil_egresado', fn () => redirect()->route('egresados.index', status: 301));
+Route::get('/pre-egresados', fn () => redirect()->route('egresados.index', status: 301));
 Route::get('/{slug}', [HomeController::class, 'show'])->name('page.show');

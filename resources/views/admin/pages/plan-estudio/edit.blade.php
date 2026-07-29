@@ -9,6 +9,8 @@
         $hero = $sections['plan_hero'] ?? null;
         $intro = $sections['plan_intro'] ?? null;
         $summary = $sections['plan_summary'] ?? null;
+        $specializations = $sections['plan_especializaciones_intro'] ?? null;
+        $specializationSubjects = $sections['plan_especializaciones_materias'] ?? null;
         $areas = $sections['plan_areas'] ?? null;
         $cycles = $sections['plan_cycles'] ?? null;
         $cta = $sections['plan_cta'] ?? null;
@@ -35,6 +37,80 @@
             <form action="{{ route('admin.pages.plan.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                 @csrf
                 @method('PUT')
+
+                <div class="bg-white shadow rounded-2xl p-6">
+                    <h3 class="text-2xl font-bold mb-6">Lineas de especializacion</h3>
+                    <div class="grid grid-cols-1 gap-6 mb-8">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Titulo</label>
+                            <input type="text" name="esp_intro_title" value="{{ old('esp_intro_title', $specializations->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Descripcion</label>
+                            <textarea name="esp_intro_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm">{{ old('esp_intro_content', $specializations->content ?? '') }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        @foreach(($specializations?->items ?? collect()) as $item)
+                            <div class="border border-slate-200 rounded-2xl p-5">
+                                <h4 class="font-semibold text-lg mb-4">Linea #{{ $loop->iteration }}</h4>
+                                <div class="grid grid-cols-1 gap-6">
+                                    <input type="text" name="esp_intro_items[{{ $item->id }}][title]" value="{{ old('esp_intro_items.' . $item->id . '.title', $item->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo">
+                                    <input type="text" name="esp_intro_items[{{ $item->id }}][subtitle]" value="{{ old('esp_intro_items.' . $item->id . '.subtitle', $item->subtitle) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtitulo">
+                                    <textarea name="esp_intro_items[{{ $item->id }}][content]" rows="5" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('esp_intro_items.' . $item->id . '.content', $item->content) }}</textarea>
+                                    <input type="file" name="esp_intro_images[{{ $item->id }}]" accept=".jpg,.jpeg,.png,.webp" class="w-full rounded-lg border-gray-300 shadow-sm">
+                                    @if($item->image)
+                                        <img src="{{ asset('storage/' . $item->image) }}" class="h-40 w-full max-w-md object-cover rounded-xl border">
+                                    @endif
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <input type="number" min="1" name="esp_intro_items[{{ $item->id }}][sort_order]" value="{{ old('esp_intro_items.' . $item->id . '.sort_order', $item->sort_order) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Orden">
+                                        <label class="inline-flex items-center gap-2">
+                                            <input type="hidden" name="esp_intro_items[{{ $item->id }}][status]" value="0">
+                                            <input type="checkbox" name="esp_intro_items[{{ $item->id }}][status]" value="1" {{ old('esp_intro_items.' . $item->id . '.status', $item->status) ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm">
+                                            <span class="text-sm text-gray-700">Activo</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="bg-white shadow rounded-2xl p-6">
+                    <h3 class="text-2xl font-bold mb-6">Materias por linea</h3>
+                    <div class="grid grid-cols-1 gap-6 mb-8">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Titulo</label>
+                            <input type="text" name="esp_mat_title" value="{{ old('esp_mat_title', $specializationSubjects->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Descripcion</label>
+                            <textarea name="esp_mat_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm">{{ old('esp_mat_content', $specializationSubjects->content ?? '') }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        @foreach(($specializationSubjects?->items ?? collect()) as $item)
+                            <div class="border border-slate-200 rounded-2xl p-5">
+                                <h4 class="font-semibold text-lg mb-4">Linea #{{ $loop->iteration }}</h4>
+                                <div class="grid grid-cols-1 gap-6">
+                                    <input type="text" name="esp_mat_items[{{ $item->id }}][title]" value="{{ old('esp_mat_items.' . $item->id . '.title', $item->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo">
+                                    <input type="text" name="esp_mat_items[{{ $item->id }}][subtitle]" value="{{ old('esp_mat_items.' . $item->id . '.subtitle', $item->subtitle) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtitulo">
+                                    <textarea name="esp_mat_items[{{ $item->id }}][content]" rows="8" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('esp_mat_items.' . $item->id . '.content', $item->content) }}</textarea>
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <input type="number" min="1" name="esp_mat_items[{{ $item->id }}][sort_order]" value="{{ old('esp_mat_items.' . $item->id . '.sort_order', $item->sort_order) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Orden">
+                                        <label class="inline-flex items-center gap-2">
+                                            <input type="hidden" name="esp_mat_items[{{ $item->id }}][status]" value="0">
+                                            <input type="checkbox" name="esp_mat_items[{{ $item->id }}][status]" value="1" {{ old('esp_mat_items.' . $item->id . '.status', $item->status) ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm">
+                                            <span class="text-sm text-gray-700">Activo</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
 
                 <div class="bg-white shadow rounded-2xl p-6">
                     <h3 class="text-2xl font-bold mb-6">Hero principal</h3>

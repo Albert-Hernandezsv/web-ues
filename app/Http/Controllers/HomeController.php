@@ -75,5 +75,35 @@ class HomeController extends Controller
         return view('pages.generic', compact('page', 'sections'));
     }
 
+    public function egresados(): View
+    {
+        $perfilPage = Page::where('slug', 'perfil_egresado')
+            ->where('status', true)
+            ->firstOrFail();
+
+        $preegresoPage = Page::where('slug', 'pre-egresados')
+            ->where('status', true)
+            ->firstOrFail();
+
+        $perfilSections = $perfilPage->sections()
+            ->with(['items' => function ($query) {
+                $query->where('status', true)->orderBy('sort_order');
+            }])
+            ->where('status', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->keyBy('section_key');
+
+        $preegresoSections = $preegresoPage->sections()
+            ->with(['items' => function ($query) {
+                $query->where('status', true)->orderBy('sort_order');
+            }])
+            ->where('status', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->keyBy('section_key');
+
+        return view('pages.egresados', compact('perfilPage', 'preegresoPage', 'perfilSections', 'preegresoSections'));
+    }
 
 }
