@@ -34,7 +34,9 @@
                     </select>
                 </div>
 
-                <input type="file" name="file" class="w-full rounded-lg border-gray-300 shadow-sm">
+                <p class="text-sm text-gray-600">Solo imágenes JPG, JPEG, PNG o WebP, hasta 20 MB. Para videos, utiliza la URL externa.</p>
+                <x-input-error :messages="$errors->get('file')" class="mt-2" />
+                <input type="file" name="file" accept=".jpg,.jpeg,.png,.webp" class="w-full rounded-lg border-gray-300 shadow-sm">
 
                 @if($gallery->file_path && $gallery->media_type === 'image')
                     <img src="{{ asset('storage/' . $gallery->file_path) }}" class="h-56 w-full max-w-xl object-cover rounded-xl border">

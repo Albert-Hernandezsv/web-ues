@@ -33,7 +33,9 @@
                     </select>
                 </div>
 
-                <input type="file" name="file" class="w-full rounded-lg border-gray-300 shadow-sm">
+                <p class="text-sm text-gray-600">Solo imágenes JPG, JPEG, PNG o WebP, hasta 20 MB. Para videos, utiliza la URL externa.</p>
+                <x-input-error :messages="$errors->get('file')" class="mt-2" />
+                <input type="file" name="file" accept=".jpg,.jpeg,.png,.webp" class="w-full rounded-lg border-gray-300 shadow-sm">
 
                 <div class="flex items-center gap-4">
                     <button type="submit" class="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 transition">

@@ -50,7 +50,7 @@ Editar `.env` con la configuración local. El ejemplo original utiliza SQLite; c
 ```dotenv
 APP_NAME=UES
 APP_ENV=local
-APP_DEBUG=true
+APP_DEBUG=false
 APP_URL=http://127.0.0.1:8000
 
 DB_CONNECTION=mysql
@@ -148,3 +148,27 @@ Problemas frecuentes
 - Imágenes o descargas ausentes: restaurar `storage/app/public` y comprobar el enlace `public/storage`.
 - 404 en el inicio o páginas del sitio: verificar que se importó el dump y que existen los registros de páginas activos.
 - Error 500: revisar `storage/logs/laravel.log`, la clave `APP_KEY` y los permisos de escritura.
+## Cookies de sesión en HTTPS
+
+Al desplegar el sitio con HTTPS, establecer en `.env` (sustituir el dominio de ejemplo):
+
+```dotenv
+APP_URL=https://tu-dominio.example
+SESSION_SECURE_COOKIE=true
+```
+
+Aplicar la configuración desde la carpeta del proyecto:
+
+```powershell
+php artisan config:cache
+```
+
+La cookie de sesión tendrá el atributo `Secure`, por lo que el navegador solo la enviará por HTTPS. Esta opción no instala un certificado ni redirige HTTP a HTTPS; el servidor debe tener HTTPS configurado.
+
+Si `SESSION_SECURE_COOKIE` se omite, el proyecto activa esta protección cuando `APP_URL` comienza con el esquema `https`. Para trabajar localmente por HTTP, mantener `APP_URL=http://localhost/ues` (o la URL local utilizada) y omitir `SESSION_SECURE_COOKIE`; después ejecutar `php artisan config:clear`.
+
+En el navegador, verificar tras iniciar sesión que la cookie de sesión tenga el atributo `Secure` en el entorno HTTPS.
+
+## Depuración en producción
+
+Mantener APP_DEBUG=false en producción. El archivo .env.example también lo desactiva por defecto. Después de modificar el entorno, ejecutar php artisan config:cache en producción, o php artisan config:clear en desarrollo. Revisar los errores en storage/logs/laravel.log; las trazas no deben mostrarse a los visitantes.

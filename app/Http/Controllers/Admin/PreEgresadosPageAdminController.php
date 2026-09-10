@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class PreEgresadosPageAdminController extends Controller
 {
@@ -69,6 +70,7 @@ class PreEgresadosPageAdminController extends Controller
             'trabajo_items' => ['nullable', 'array'],
             'trabajo_items.*.title' => ['nullable', 'string', 'max:255'],
             'trabajo_items.*.content' => ['nullable', 'string'],
+            'trabajo_images' => ['nullable', 'array'],
             'trabajo_images.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'trabajo_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'trabajo_items.*.status' => ['nullable', 'boolean'],
@@ -109,6 +111,34 @@ class PreEgresadosPageAdminController extends Controller
         $ssPas = PageSection::where('page_id', $page->id)->where('section_key', 'preegreso_servicio_social_pasos')->firstOrFail();
         $cta = PageSection::where('page_id', $page->id)->where('section_key', 'preegreso_cta')->firstOrFail();
 
+        // Resolve every submitted ID within its section before any database or file writes.
+        $itemSections = [
+            'trabajo_items' => $trabajos,
+            'ss_req_items' => $ssReq,
+            'ss_obj_items' => $ssObj,
+            'ss_mod_items' => $ssMod,
+            'ss_pas_items' => $ssPas,
+        ];
+        $itemRows = [];
+        foreach ($itemSections as $field => $section) {
+            $ids = array_keys($request->input($field) ?? []);
+            if ($field === 'trabajo_items') {
+                $ids = array_unique(array_merge($ids, array_keys($request->file('trabajo_images') ?? [])));
+            }
+            foreach ($ids as $id) {
+                if (!preg_match('/^[1-9][0-9]*$/D', (string) $id)) {
+                    throw ValidationException::withMessages([$field => 'El identificador del elemento no es válido.']);
+                }
+            }
+            $rows = PageSectionItem::where('page_section_id', $section->id)
+                ->whereIn('id', $ids)->get()->keyBy('id');
+            if ($rows->count() !== count($ids)) {
+                throw ValidationException::withMessages([
+                    $field => 'Uno o más elementos no pertenecen a esta sección o ya no existen.',
+                ]);
+            }
+            $itemRows[$field] = $rows;
+        }
         $hero->title = $request->hero_title;
         $hero->subtitle = $request->hero_subtitle;
         $hero->content = $request->hero_content;
@@ -156,25 +186,25 @@ class PreEgresadosPageAdminController extends Controller
         $cta->button_link = $request->cta_button_link;
         $cta->save();
 
-        $this->updateItems($request, 'trabajo_items', 'trabajo_images');
-        $this->updateItems($request, 'ss_req_items');
-        $this->updateItems($request, 'ss_obj_items');
-        $this->updateItems($request, 'ss_mod_items');
-        $this->updateItems($request, 'ss_pas_items');
+        $this->updateItems($request, 'trabajo_items', $itemRows['trabajo_items'], 'trabajo_images');
+        $this->updateItems($request, 'ss_req_items', $itemRows['ss_req_items']);
+        $this->updateItems($request, 'ss_obj_items', $itemRows['ss_obj_items']);
+        $this->updateItems($request, 'ss_mod_items', $itemRows['ss_mod_items']);
+        $this->updateItems($request, 'ss_pas_items', $itemRows['ss_pas_items']);
 
         return redirect()
             ->route('admin.pages.preegreso.edit')
             ->with('success', 'La pagina Egresados parte 2 se actualizo correctamente.');
     }
 
-    private function updateItems(Request $request, string $field, ?string $imageField = null): void
+    private function updateItems(Request $request, string $field, \Illuminate\Support\Collection $rows, ?string $imageField = null): void
     {
-        $items = $request->input($field, []);
+        $items = ($request->input($field) ?? []);
         $images = $imageField ? $request->file($imageField, []) : [];
 
         foreach ($items as $id => $item) {
-            $row = PageSectionItem::find($id);
-            if (!$row) continue;
+            $row = $rows->get($id);
+
 
             $row->title = $item['title'] ?? null;
             $row->subtitle = $item['subtitle'] ?? null;

@@ -37,7 +37,7 @@ class GalleryAdminController extends Controller
             'external_url' => ['nullable', 'string', 'max:1000'],
             'sort_order' => ['required', 'integer', 'min:1'],
             'status' => ['required', 'boolean'],
-            'file' => ['nullable', 'file', 'max:20480'],
+            'file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'extensions:jpg,jpeg,png,webp', 'max:20480'],
         ]);
 
         $gallery = new Gallery();
@@ -77,7 +77,7 @@ class GalleryAdminController extends Controller
             'external_url' => ['nullable', 'string', 'max:1000'],
             'sort_order' => ['required', 'integer', 'min:1'],
             'status' => ['required', 'boolean'],
-            'file' => ['nullable', 'file', 'max:20480'],
+            'file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'extensions:jpg,jpeg,png,webp', 'max:20480'],
         ]);
 
         $gallery->title = $validated['title'];
