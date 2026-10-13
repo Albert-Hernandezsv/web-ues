@@ -9,10 +9,14 @@
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <form action="{{ route('admin.gallery.update', $gallery) }}" method="POST" enctype="multipart/form-data" class="space-y-6 bg-white shadow rounded-2xl p-6">
                 @csrf
+ @php $canWrite = auth()->user()->can('gallery.edit') && (!$gallery->status || auth()->user()->can('gallery.publish')); @endphp
+ @if (!$canWrite)<p class="rounded-lg bg-blue-50 p-4">Modo de consulta. Para modificar contenido activo también necesitas permiso de publicación.</p>@endif
+ <fieldset @disabled(!$canWrite) class="space-y-6">
+                <x-validation-summary />
                 @method('PUT')
 
-                <input type="text" name="title" value="{{ old('title', $gallery->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título" required>
-                <input type="text" name="subtitle" value="{{ old('subtitle', $gallery->subtitle) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtítulo">
+                <div class="title-field"><input maxlength="80" data-title-limit type="text" name="title" value="{{ old('title', $gallery->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Título" required><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
+                <div class="title-field"><input maxlength="80" data-title-limit type="text" name="subtitle" value="{{ old('subtitle', $gallery->subtitle) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtítulo"><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
                 <input type="text" name="location" value="{{ old('location', $gallery->location) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Lugar">
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -28,10 +32,10 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <input type="number" min="1" name="sort_order" value="{{ old('sort_order', $gallery->sort_order) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Orden">
-                    <select name="status" class="w-full rounded-lg border-gray-300 shadow-sm">
+                    @can('gallery.publish')<select name="status" class="w-full rounded-lg border-gray-300 shadow-sm">
                         <option value="1" {{ old('status', (string)(int)$gallery->status) == '1' ? 'selected' : '' }}>Activo</option>
                         <option value="0" {{ old('status', (string)(int)$gallery->status) == '0' ? 'selected' : '' }}>Inactivo</option>
-                    </select>
+                    </select>@else<input type="hidden" name="status" value="{{ (int) $gallery->status }}"><p class="text-sm text-gray-600">Solo un usuario con permiso de publicación puede cambiar el estado.</p>@endcan
                 </div>
 
                 <p class="text-sm text-gray-600">Solo imágenes JPG, JPEG, PNG o WebP, hasta 20 MB. Para videos, utiliza la URL externa.</p>
@@ -51,7 +55,7 @@
                         Volver
                     </a>
                 </div>
-            </form>
+            </fieldset></form>
         </div>
     </div>
 </x-app-layout>

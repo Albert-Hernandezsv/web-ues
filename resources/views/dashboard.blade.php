@@ -18,6 +18,11 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @can('users.manage')<a href="{{ route('admin.users.index') }}" class="block bg-white rounded-2xl shadow-md border border-gray-200 p-6"><h3 class="text-xl font-semibold">Gestión de usuarios</h3><p class="text-gray-600 mt-2">Crear cuentas, asignar permisos y activar o desactivar el acceso.</p></a>@endcan
+                @foreach (['news'=>'Noticias','alumnis'=>'Alumnis','gallery'=>'Galería','downloads'=>'Descargas'] as $module=>$label)
+                    @can($module.'.view')<a href="{{ route('admin.'.$module.'.index') }}" class="block bg-white rounded-2xl shadow-md border border-gray-200 p-6"><h3 class="text-xl font-semibold">{{ $label }}</h3><p class="text-gray-600 mt-2">Consultar y administrar contenido según tus permisos.</p></a>@endcan
+                @endforeach
+
                 <a href="{{ route('profile.edit') }}"
                    class="block bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 border border-gray-200 p-6">
                     <div class="flex items-center justify-between mb-4">
@@ -27,13 +32,13 @@
                             </svg>
                         </div>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Gestionar usuario</h3>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Mi perfil</h3>
                     <p class="text-gray-600 text-sm">
-                        Actualiza el nombre, correo y contraseña del usuario administrador.
+                        Actualiza tus datos y tu contraseña.
                     </p>
                 </a>
 
-                <a href="{{ route('admin.pages.index') }}"
+                @can('pages.access')<a href="{{ route('admin.pages.index') }}"
                    class="block bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 border border-gray-200 p-6">
                     <div class="flex items-center justify-between mb-4">
                         <div class="w-14 h-14 rounded-xl bg-green-100 flex items-center justify-center">
@@ -47,7 +52,7 @@
                     <p class="text-gray-600 text-sm">
                         Administra las páginas principales del sitio. Luego definimos qué llevará exactamente.
                     </p>
-                </a>
+                </a>@endcan
 
             </div>
         </div>

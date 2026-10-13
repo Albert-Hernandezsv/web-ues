@@ -28,24 +28,24 @@ class HomePageAdminController extends Controller
         $page = Page::where('slug', 'inicio')->firstOrFail();
 
         $request->validate([
-            'home_info_title' => ['nullable', 'string', 'max:255'],
-            'home_info_content' => ['nullable', 'string'],
+            'home_info_title' => ['required', 'string', 'max:80'],
+            'home_info_content' => ['required', 'string'],
             'home_info_image_1_link' => ['nullable', 'string', 'max:255'],
             'home_info_image_2_link' => ['nullable', 'string', 'max:255'],
 
-            'home_plan_title' => ['nullable', 'string', 'max:255'],
-            'home_plan_content' => ['nullable', 'string'],
+            'home_plan_title' => ['required', 'string', 'max:80'],
+            'home_plan_content' => ['required', 'string'],
             'home_plan_extra_1' => ['nullable', 'string', 'max:255'],
             'home_plan_extra_2' => ['nullable', 'string', 'max:255'],
             'home_plan_extra_3' => ['nullable', 'string', 'max:255'],
             'home_plan_button_text' => ['nullable', 'string', 'max:100'],
             'home_plan_button_link' => ['nullable', 'string', 'max:255'],
 
-            'home_news_title' => ['nullable', 'string', 'max:255'],
-            'home_news_content' => ['nullable', 'string'],
+            'home_news_title' => ['required', 'string', 'max:80'],
+            'home_news_content' => ['required', 'string'],
 
-            'slider.*.title' => ['nullable', 'string', 'max:255'],
-            'slider.*.subtitle' => ['nullable', 'string', 'max:255'],
+            'slider.*.title' => ['required_if:slider.*.status,1', 'nullable', 'string', 'max:80'],
+            'slider.*.subtitle' => ['nullable', 'string', 'max:80'],
             'slider.*.link' => ['nullable', 'string', 'max:255'],
             'slider.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'slider.*.status' => ['nullable', 'boolean'],
@@ -53,6 +53,9 @@ class HomePageAdminController extends Controller
             'slider_images.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'home_info_image_1' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'home_info_image_2' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+        ], [
+            'required' => 'El campo :attribute es obligatorio.',
+            'required_if' => 'El campo :attribute es obligatorio cuando el elemento está activo.',
         ]);
 
         $homeInfo = PageSection::where('page_id', $page->id)->where('section_key', 'home_info')->firstOrFail();

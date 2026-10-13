@@ -5,20 +5,16 @@
                 Administrar galería
             </h2>
 
-            <a href="{{ route('admin.gallery.create') }}"
+            @can('gallery.create')<a href="{{ route('admin.gallery.create') }}"
                class="rounded-xl bg-blue-600 px-5 py-2.5 font-semibold text-white hover:bg-blue-700 transition">
                 Nuevo elemento
-            </a>
+            </a>@endcan
         </div>
     </x-slot>
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if(session('success'))
-                <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-green-700">
-                    {{ session('success') }}
-                </div>
-            @endif
+
 
             <div class="bg-white shadow rounded-2xl overflow-hidden">
                 <div class="overflow-x-auto">
@@ -59,16 +55,15 @@
                                     <td class="px-4 py-4">
                                         <div class="flex items-center justify-end gap-3">
                                             <a href="{{ route('admin.gallery.edit', $item) }}" class="text-blue-600 font-semibold hover:underline">
-                                                Editar
-                                            </a>
+                                                Consultar / editar </a>
 
-                                            <form action="{{ route('admin.gallery.destroy', $item) }}" method="POST" onsubmit="return confirm('¿Eliminar este elemento?');">
+                                            @can('gallery.delete')<form action="{{ route('admin.gallery.destroy', $item) }}" method="POST" data-confirm="¿Eliminar este elemento?" onsubmit="return confirm('¿Eliminar este elemento?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-red-600 font-semibold hover:underline">
                                                     Eliminar
                                                 </button>
-                                            </form>
+                                            </form>@endcan
                                         </div>
                                     </td>
                                 </tr>

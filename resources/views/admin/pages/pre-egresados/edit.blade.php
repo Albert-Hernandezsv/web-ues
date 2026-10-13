@@ -19,32 +19,24 @@
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if(session('success'))
-                <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-green-700">
-                    {{ session('success') }}
-                </div>
-            @endif
 
-            @if ($errors->any())
-                <div class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700">
-                    <ul class="list-disc pl-5">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+
+
 
             <form action="{{ route('admin.pages.preegreso.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                 @csrf
+ @cannot('pages.preegreso.edit')<p class="rounded-lg bg-blue-50 p-4">Modo de consulta. No tienes permiso para modificar esta página.</p>@endcannot
+ <fieldset @disabled(auth()->user()->cannot('pages.preegreso.edit')) class="space-y-6">
+                <p class="text-sm text-gray-700">Completa los títulos y contenidos marcados como obligatorios. Los títulos de elementos solo son obligatorios cuando están activos.</p>
+                <x-validation-summary />
                 @method('PUT')
 
                 <div class="bg-white shadow rounded-2xl p-6">
                     <h3 class="text-2xl font-bold mb-6">Hero</h3>
                     <div class="grid grid-cols-1 gap-6">
-                        <input type="text" name="hero_title" value="{{ old('hero_title', $hero->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo">
-                        <input type="text" name="hero_subtitle" value="{{ old('hero_subtitle', $hero->subtitle ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtitulo">
-                        <textarea name="hero_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('hero_content', $hero->content ?? '') }}</textarea>
+                        <div class="title-field"><span class="text-xs font-semibold text-red-700">Obligatorio</span><input required maxlength="80" data-title-limit type="text" name="hero_title" value="{{ old('hero_title', $hero->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo"><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
+                        <div class="title-field"><input maxlength="80" data-title-limit type="text" name="hero_subtitle" value="{{ old('hero_subtitle', $hero->subtitle ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtitulo"><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
+                        <span class="text-xs font-semibold text-red-700">Obligatorio</span><textarea required name="hero_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('hero_content', $hero->content ?? '') }}</textarea>
                         <input type="file" name="hero_image" accept=".jpg,.jpeg,.png,.webp" class="w-full rounded-lg border-gray-300 shadow-sm">
                         @if(!empty($hero?->image_1))
                             <img src="{{ asset('storage/' . $hero->image_1) }}" class="h-56 w-full max-w-xl object-cover rounded-xl border">
@@ -55,8 +47,8 @@
                 <div class="bg-white shadow rounded-2xl p-6">
                     <h3 class="text-2xl font-bold mb-6">Introduccion</h3>
                     <div class="grid grid-cols-1 gap-6">
-                        <input type="text" name="intro_title" value="{{ old('intro_title', $intro->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo">
-                        <textarea name="intro_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('intro_content', $intro->content ?? '') }}</textarea>
+                        <div class="title-field"><span class="text-xs font-semibold text-red-700">Obligatorio</span><input required maxlength="80" data-title-limit type="text" name="intro_title" value="{{ old('intro_title', $intro->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo"><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
+                        <span class="text-xs font-semibold text-red-700">Obligatorio</span><textarea required name="intro_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('intro_content', $intro->content ?? '') }}</textarea>
                     </div>
                 </div>
 
@@ -75,8 +67,8 @@
                     <div class="bg-white shadow rounded-2xl p-6">
                         <h3 class="text-2xl font-bold mb-6">{{ $block['title'] }}</h3>
                         <div class="grid grid-cols-1 gap-6">
-                            <input type="text" name="{{ $block['title_name'] }}" value="{{ old($block['title_name'], $block['section']->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo">
-                            <textarea name="{{ $block['content_name'] }}" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old($block['content_name'], $block['section']->content ?? '') }}</textarea>
+                            <div class="title-field"><span class="text-xs font-semibold text-red-700">Obligatorio</span><input required maxlength="80" data-title-limit type="text" name="{{ $block['title_name'] }}" value="{{ old($block['title_name'], $block['section']->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo"><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
+                            <span class="text-xs font-semibold text-red-700">Obligatorio</span><textarea required name="{{ $block['content_name'] }}" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old($block['content_name'], $block['section']->content ?? '') }}</textarea>
 
                             @if($block['title_name'] === 'ss_intro_title')
                                 <input type="text" name="ss_intro_extra_1" value="{{ old('ss_intro_extra_1', $ssIntro->extra_1 ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Dato 1">
@@ -104,10 +96,10 @@
                             @foreach(($block['section']?->items ?? collect()) as $item)
                                 <div class="border border-slate-200 rounded-2xl p-5">
                                     <div class="grid grid-cols-1 gap-6">
-                                        <input type="text" name="{{ $block['items_name'] }}[{{ $item->id }}][title]" value="{{ old($block['items_name'].'.'.$item->id.'.title', $item->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo">
+                                        <div class="title-field"><input data-required-active @required(old($block['items_name'].'.'.$item->id.'.status', $item->status)) maxlength="80" data-title-limit type="text" name="{{ $block['items_name'] }}[{{ $item->id }}][title]" value="{{ old($block['items_name'].'.'.$item->id.'.title', $item->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo"><span class="text-xs text-red-700" data-required-hint>Obligatorio cuando está activo</span><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
 
                                         @if($block['has_subtitle'])
-                                            <input type="text" name="{{ $block['items_name'] }}[{{ $item->id }}][subtitle]" value="{{ old($block['items_name'].'.'.$item->id.'.subtitle', $item->subtitle) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtitulo">
+                                            <div class="title-field"><input maxlength="80" data-title-limit type="text" name="{{ $block['items_name'] }}[{{ $item->id }}][subtitle]" value="{{ old($block['items_name'].'.'.$item->id.'.subtitle', $item->subtitle) }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Subtitulo"><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
                                         @endif
 
                                         <textarea name="{{ $block['items_name'] }}[{{ $item->id }}][content]" rows="6" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old($block['items_name'].'.'.$item->id.'.content', $item->content) }}</textarea>
@@ -142,8 +134,8 @@
                 <div class="bg-white shadow rounded-2xl p-6">
                     <h3 class="text-2xl font-bold mb-6">CTA final</h3>
                     <div class="grid grid-cols-1 gap-6">
-                        <input type="text" name="cta_title" value="{{ old('cta_title', $cta->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo">
-                        <textarea name="cta_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('cta_content', $cta->content ?? '') }}</textarea>
+                        <div class="title-field"><span class="text-xs font-semibold text-red-700">Obligatorio</span><input required maxlength="80" data-title-limit type="text" name="cta_title" value="{{ old('cta_title', $cta->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Titulo"><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
+                        <span class="text-xs font-semibold text-red-700">Obligatorio</span><textarea required name="cta_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Contenido">{{ old('cta_content', $cta->content ?? '') }}</textarea>
                         <input type="text" name="cta_button_text" value="{{ old('cta_button_text', $cta->button_text ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Texto boton">
                         <input type="text" name="cta_button_link" value="{{ old('cta_button_link', $cta->button_link ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm" placeholder="Link boton">
                     </div>
@@ -158,7 +150,7 @@
                         Volver
                     </a>
                 </div>
-            </form>
+            </fieldset></form>
         </div>
     </div>
 </x-app-layout>

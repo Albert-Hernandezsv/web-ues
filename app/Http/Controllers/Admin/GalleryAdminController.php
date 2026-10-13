@@ -28,9 +28,10 @@ class GalleryAdminController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        \App\Support\PublicationAccess::authorize($request, 'gallery');
         $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'subtitle' => ['nullable', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:80'],
+            'subtitle' => ['nullable', 'string', 'max:80'],
             'location' => ['nullable', 'string', 'max:255'],
             'event_date' => ['nullable', 'date'],
             'media_type' => ['required', 'in:image,video'],
@@ -68,9 +69,10 @@ class GalleryAdminController extends Controller
 
     public function update(Request $request, Gallery $gallery): RedirectResponse
     {
+        \App\Support\PublicationAccess::authorize($request, 'gallery', $gallery);
         $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'subtitle' => ['nullable', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:80'],
+            'subtitle' => ['nullable', 'string', 'max:80'],
             'location' => ['nullable', 'string', 'max:255'],
             'event_date' => ['nullable', 'date'],
             'media_type' => ['required', 'in:image,video'],

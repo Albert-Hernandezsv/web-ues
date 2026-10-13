@@ -7,22 +7,17 @@
 
     <div class="py-10">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            @if ($errors->any())
-                <div class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700">
-                    <ul class="list-disc pl-5">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+
 
             <form action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6 bg-white shadow rounded-2xl p-6">
                 @csrf
+ @php $canWrite = auth()->user()->can('news.create'); @endphp
+ @if (!$canWrite)<p class="rounded-lg bg-blue-50 p-4">Modo de consulta. Para modificar contenido activo también necesitas permiso de publicación.</p>@endif
+ <fieldset @disabled(!$canWrite) class="space-y-6">
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                    <input type="text" name="title" value="{{ old('title') }}" class="w-full rounded-lg border-gray-300 shadow-sm" required>
+                    <div class="title-field"><input maxlength="80" data-title-limit type="text" name="title" value="{{ old('title') }}" class="w-full rounded-lg border-gray-300 shadow-sm" required><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
                 </div>
 
                 <div>
@@ -38,15 +33,15 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de publicación</label>
-                        <input type="datetime-local" name="published_at" value="{{ old('published_at') }}" class="w-full rounded-lg border-gray-300 shadow-sm">
+                        <div>@can('news.publish')<input type="datetime-local" name="published_at" value="{{ old('published_at') }}" class="w-full rounded-lg border-gray-300 shadow-sm">@else<input type="hidden" name="published_at" value="">@endcan<p class="mt-1 text-sm text-gray-600">Hora de El Salvador (UTC−6). Si está activo, se publicará al llegar esta fecha y hora. Sin fecha permanece como borrador.</p></div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-                        <select name="status" class="w-full rounded-lg border-gray-300 shadow-sm">
+                        @can('news.publish')<select name="status" class="w-full rounded-lg border-gray-300 shadow-sm">
                             <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Activa</option>
                             <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Inactiva</option>
-                        </select>
+                        </select>@else<input type="hidden" name="status" value="0"><p class="text-sm text-gray-600">Solo un usuario con permiso de publicación puede cambiar el estado.</p>@endcan
                     </div>
                 </div>
 
@@ -64,7 +59,7 @@
                         Cancelar
                     </a>
                 </div>
-            </form>
+            </fieldset></form>
         </div>
     </div>
 </x-app-layout>

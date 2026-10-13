@@ -37,7 +37,27 @@ class DownloadController extends Controller
 
         return Storage::disk('public')->download(
             $download->file_path,
-            basename($download->file_path)
+            $this->downloadName($download)
         );
+    }
+
+    private function downloadName(Download $download): string
+    {
+        $extension = strtolower(pathinfo($download->file_path, PATHINFO_EXTENSION));
+        // The original upload name is not stored; use the public document title.
+        $name = preg_replace('/[\x00-\x1F\x7F<>:"\/\\\\|?*]+/u', ' ', (string) $download->title);
+        $name = trim(preg_replace('/\s+/u', ' ', $name), " .\t\n\r\0\x0B");
+        if ($extension !== '' && str_ends_with(strtolower($name), '.'.$extension)) {
+            $name = substr($name, 0, -strlen($extension) - 1);
+        }
+        $name = rtrim(mb_substr($name, 0, 150), ' .');
+        if ($name === '') {
+            $name = 'Documento-'.($download->id ?? 'descarga');
+        }
+        if (preg_match('/^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\.|$)/i', $name)) {
+            $name = 'Documento-'.$name;
+        }
+
+        return $name.($extension !== '' ? '.'.$extension : '');
     }
 }

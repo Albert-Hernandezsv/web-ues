@@ -13,7 +13,7 @@
 
                     @if($alumni->published_at)
                         <p class="news-detail-date">
-                            {{ $alumni->published_at->format('d/m/Y') }}
+                            {{ $alumni->published_at->copy()->timezone(config('publication.timezone'))->format('d/m/Y') }}
                         </p>
                     @endif
 

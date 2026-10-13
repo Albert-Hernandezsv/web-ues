@@ -34,41 +34,41 @@ class PreEgresadosPageAdminController extends Controller
         $page = Page::where('slug', 'pre-egresados')->firstOrFail();
 
         $request->validate([
-            'hero_title' => ['nullable', 'string', 'max:255'],
-            'hero_subtitle' => ['nullable', 'string', 'max:255'],
-            'hero_content' => ['nullable', 'string'],
+            'hero_title' => ['required', 'string', 'max:80'],
+            'hero_subtitle' => ['nullable', 'string', 'max:80'],
+            'hero_content' => ['required', 'string'],
             'hero_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
 
-            'intro_title' => ['nullable', 'string', 'max:255'],
-            'intro_content' => ['nullable', 'string'],
+            'intro_title' => ['required', 'string', 'max:80'],
+            'intro_content' => ['required', 'string'],
 
-            'trabajos_title' => ['nullable', 'string', 'max:255'],
-            'trabajos_content' => ['nullable', 'string'],
+            'trabajos_title' => ['required', 'string', 'max:80'],
+            'trabajos_content' => ['required', 'string'],
 
-            'ss_intro_title' => ['nullable', 'string', 'max:255'],
-            'ss_intro_content' => ['nullable', 'string'],
+            'ss_intro_title' => ['required', 'string', 'max:80'],
+            'ss_intro_content' => ['required', 'string'],
             'ss_intro_extra_1' => ['nullable', 'string', 'max:255'],
             'ss_intro_extra_2' => ['nullable', 'string', 'max:255'],
 
-            'ss_req_title' => ['nullable', 'string', 'max:255'],
-            'ss_req_content' => ['nullable', 'string'],
+            'ss_req_title' => ['required', 'string', 'max:80'],
+            'ss_req_content' => ['required', 'string'],
 
-            'ss_obj_title' => ['nullable', 'string', 'max:255'],
-            'ss_obj_content' => ['nullable', 'string'],
+            'ss_obj_title' => ['required', 'string', 'max:80'],
+            'ss_obj_content' => ['required', 'string'],
 
-            'ss_mod_title' => ['nullable', 'string', 'max:255'],
-            'ss_mod_content' => ['nullable', 'string'],
+            'ss_mod_title' => ['required', 'string', 'max:80'],
+            'ss_mod_content' => ['required', 'string'],
 
-            'ss_pas_title' => ['nullable', 'string', 'max:255'],
-            'ss_pas_content' => ['nullable', 'string'],
+            'ss_pas_title' => ['required', 'string', 'max:80'],
+            'ss_pas_content' => ['required', 'string'],
 
-            'cta_title' => ['nullable', 'string', 'max:255'],
-            'cta_content' => ['nullable', 'string'],
+            'cta_title' => ['required', 'string', 'max:80'],
+            'cta_content' => ['required', 'string'],
             'cta_button_text' => ['nullable', 'string', 'max:100'],
             'cta_button_link' => ['nullable', 'string', 'max:255'],
 
             'trabajo_items' => ['nullable', 'array'],
-            'trabajo_items.*.title' => ['nullable', 'string', 'max:255'],
+            'trabajo_items.*.title' => ['required_if:trabajo_items.*.status,1', 'nullable', 'string', 'max:80'],
             'trabajo_items.*.content' => ['nullable', 'string'],
             'trabajo_images' => ['nullable', 'array'],
             'trabajo_images.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
@@ -76,29 +76,32 @@ class PreEgresadosPageAdminController extends Controller
             'trabajo_items.*.status' => ['nullable', 'boolean'],
 
             'ss_req_items' => ['nullable', 'array'],
-            'ss_req_items.*.title' => ['nullable', 'string', 'max:255'],
-            'ss_req_items.*.subtitle' => ['nullable', 'string', 'max:255'],
+            'ss_req_items.*.title' => ['required_if:ss_req_items.*.status,1', 'nullable', 'string', 'max:80'],
+            'ss_req_items.*.subtitle' => ['nullable', 'string', 'max:80'],
             'ss_req_items.*.content' => ['nullable', 'string'],
             'ss_req_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'ss_req_items.*.status' => ['nullable', 'boolean'],
 
             'ss_obj_items' => ['nullable', 'array'],
-            'ss_obj_items.*.title' => ['nullable', 'string', 'max:255'],
+            'ss_obj_items.*.title' => ['required_if:ss_obj_items.*.status,1', 'nullable', 'string', 'max:80'],
             'ss_obj_items.*.content' => ['nullable', 'string'],
             'ss_obj_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'ss_obj_items.*.status' => ['nullable', 'boolean'],
 
             'ss_mod_items' => ['nullable', 'array'],
-            'ss_mod_items.*.title' => ['nullable', 'string', 'max:255'],
+            'ss_mod_items.*.title' => ['required_if:ss_mod_items.*.status,1', 'nullable', 'string', 'max:80'],
             'ss_mod_items.*.content' => ['nullable', 'string'],
             'ss_mod_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'ss_mod_items.*.status' => ['nullable', 'boolean'],
 
             'ss_pas_items' => ['nullable', 'array'],
-            'ss_pas_items.*.title' => ['nullable', 'string', 'max:255'],
+            'ss_pas_items.*.title' => ['required_if:ss_pas_items.*.status,1', 'nullable', 'string', 'max:80'],
             'ss_pas_items.*.content' => ['nullable', 'string'],
             'ss_pas_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'ss_pas_items.*.status' => ['nullable', 'boolean'],
+        ], [
+            'required' => 'El campo :attribute es obligatorio.',
+            'required_if' => 'El campo :attribute es obligatorio cuando el elemento está activo.',
         ]);
 
         $hero = PageSection::where('page_id', $page->id)->where('section_key', 'preegreso_hero')->firstOrFail();

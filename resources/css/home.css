@@ -92,7 +92,7 @@ body.public-body {
     margin: 0;
     background: var(--brand-white);
     color: var(--brand-black);
-    font-family: "Sansation", "Esphimere", "Esphimere Bold";
+    font-family: "Esphimere", Arial, sans-serif;
 }
 
 .public-main {

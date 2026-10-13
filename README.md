@@ -172,3 +172,8 @@ En el navegador, verificar tras iniciar sesión que la cookie de sesión tenga e
 ## Depuración en producción
 
 Mantener APP_DEBUG=false en producción. El archivo .env.example también lo desactiva por defecto. Después de modificar el entorno, ejecutar php artisan config:cache en producción, o php artisan config:clear en desarrollo. Revisar los errores en storage/logs/laravel.log; las trazas no deben mostrarse a los visitantes.
+
+
+## Gestión de usuarios y permisos
+
+El panel incorpora Administrador y Editor con permisos por módulo. Consulta [Roles y permisos](docs/roles-y-permisos.md) para crear cuentas, asignar accesos y ejecutar las pruebas.

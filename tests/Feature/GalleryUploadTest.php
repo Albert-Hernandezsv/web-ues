@@ -26,7 +26,7 @@ class GalleryUploadTest extends TestCase
     public function test_invalid_uploads_are_rejected_on_create_and_update_without_replacing_the_existing_file(): void
     {
         Storage::fake('public');
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->create(['role'=>'admin','is_active'=>true]));
         $gallery = new Gallery();
         $gallery->title = 'Original';
         $gallery->media_type = 'image';
@@ -62,7 +62,7 @@ class GalleryUploadTest extends TestCase
     public function test_allowed_images_can_be_created_and_replaced_and_file_is_optional_on_edit(): void
     {
         Storage::fake('public');
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->create(['role'=>'admin','is_active'=>true]));
         foreach (['jpg', 'jpeg', 'png', 'webp'] as $extension) {
             $data = ['title' => 'Photo', 'media_type' => 'image', 'sort_order' => 1, 'status' => 1];
             $this->post(route('admin.gallery.store'), $data + ['file' => UploadedFile::fake()->image('photo.'.$extension)])

@@ -1,24 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Gestionar usuario
+            Mi perfil
         </h2>
     </x-slot>
 
     <div class="py-10">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-            @if (session('success'))
-                <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-lg">
-                    {{ session('success') }}
-                </div>
-            @endif
 
-            @if (session('success_password'))
-                <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-lg">
-                    {{ session('success_password') }}
-                </div>
-            @endif
+
+
 
             <div class="bg-white shadow rounded-2xl p-6">
                 <h3 class="text-xl font-semibold text-gray-900 mb-4">Actualizar datos del usuario</h3>

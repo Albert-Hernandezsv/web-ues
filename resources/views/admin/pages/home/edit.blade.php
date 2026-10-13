@@ -13,24 +13,16 @@
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if(session('success'))
-                <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-green-700">
-                    {{ session('success') }}
-                </div>
-            @endif
 
-            @if ($errors->any())
-                <div class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700">
-                    <ul class="list-disc pl-5">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+
+
 
             <form action="{{ route('admin.pages.home.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                 @csrf
+ @cannot('pages.home.edit')<p class="rounded-lg bg-blue-50 p-4">Modo de consulta. No tienes permiso para modificar esta página.</p>@endcannot
+ <fieldset @disabled(auth()->user()->cannot('pages.home.edit')) class="space-y-6">
+                <p class="text-sm text-gray-700">Completa los títulos y contenidos marcados como obligatorios. Los títulos de elementos solo son obligatorios cuando están activos.</p>
+                <x-validation-summary />
                 @method('PUT')
 
                 <div class="bg-white shadow rounded-2xl p-6">
@@ -44,18 +36,18 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                                        <input type="text"
+                                        <div class="title-field"><input data-required-active @required(old('slider.' . $item->id . '.status', $item->status)) maxlength="80" data-title-limit type="text"
                                                name="slider[{{ $item->id }}][title]"
                                                value="{{ old('slider.' . $item->id . '.title', $item->title) }}"
-                                               class="w-full rounded-lg border-gray-300 shadow-sm">
+                                               class="w-full rounded-lg border-gray-300 shadow-sm"><span class="text-xs text-red-700" data-required-hint>Obligatorio cuando está activo</span><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
                                     </div>
 
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Subtítulo</label>
-                                        <input type="text"
+                                        <div class="title-field"><input maxlength="80" data-title-limit type="text"
                                                name="slider[{{ $item->id }}][subtitle]"
                                                value="{{ old('slider.' . $item->id . '.subtitle', $item->subtitle) }}"
-                                               class="w-full rounded-lg border-gray-300 shadow-sm">
+                                               class="w-full rounded-lg border-gray-300 shadow-sm"><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
                                     </div>
 
                                     <div>
@@ -112,12 +104,12 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="lg:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                            <input type="text" name="home_info_title" value="{{ old('home_info_title', $homeInfo->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm">
+                            <div class="title-field"><span class="text-xs font-semibold text-red-700">Obligatorio</span><input required maxlength="80" data-title-limit type="text" name="home_info_title" value="{{ old('home_info_title', $homeInfo->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm"><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
                         </div>
 
                         <div class="lg:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Contenido</label>
-                            <textarea name="home_info_content" rows="6" class="w-full rounded-lg border-gray-300 shadow-sm">{{ old('home_info_content', $homeInfo->content ?? '') }}</textarea>
+                            <span class="text-xs font-semibold text-red-700">Obligatorio</span><textarea required name="home_info_content" rows="6" class="w-full rounded-lg border-gray-300 shadow-sm">{{ old('home_info_content', $homeInfo->content ?? '') }}</textarea>
                         </div>
 
                         <div>
@@ -154,12 +146,12 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="lg:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                            <input type="text" name="home_plan_title" value="{{ old('home_plan_title', $homePlan->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm">
+                            <div class="title-field"><span class="text-xs font-semibold text-red-700">Obligatorio</span><input required maxlength="80" data-title-limit type="text" name="home_plan_title" value="{{ old('home_plan_title', $homePlan->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm"><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
                         </div>
 
                         <div class="lg:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Contenido</label>
-                            <textarea name="home_plan_content" rows="5" class="w-full rounded-lg border-gray-300 shadow-sm">{{ old('home_plan_content', $homePlan->content ?? '') }}</textarea>
+                            <span class="text-xs font-semibold text-red-700">Obligatorio</span><textarea required name="home_plan_content" rows="5" class="w-full rounded-lg border-gray-300 shadow-sm">{{ old('home_plan_content', $homePlan->content ?? '') }}</textarea>
                         </div>
 
                         <div>
@@ -195,12 +187,12 @@
                     <div class="grid grid-cols-1 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                            <input type="text" name="home_news_title" value="{{ old('home_news_title', $homeNews->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm">
+                            <div class="title-field"><span class="text-xs font-semibold text-red-700">Obligatorio</span><input required maxlength="80" data-title-limit type="text" name="home_news_title" value="{{ old('home_news_title', $homeNews->title ?? '') }}" class="w-full rounded-lg border-gray-300 shadow-sm"><p class="title-counter" data-title-counter aria-live="polite">Máximo 80 caracteres</p></div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-                            <textarea name="home_news_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm">{{ old('home_news_content', $homeNews->content ?? '') }}</textarea>
+                            <span class="text-xs font-semibold text-red-700">Obligatorio</span><textarea required name="home_news_content" rows="4" class="w-full rounded-lg border-gray-300 shadow-sm">{{ old('home_news_content', $homeNews->content ?? '') }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -215,7 +207,7 @@
                     </a>
                 </div>
                 <br><br>
-            </form>
+            </fieldset></form>
         </div>
     </div>
 </x-app-layout>

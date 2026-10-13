@@ -24,6 +24,11 @@ $ids = [];
 foreach ($fields as $field=>$key) {
     $ids[$field] = $db->table('page_section_items')->insertGetId(['page_section_id'=>$sections[$key],'title'=>'Original']);
 }
+$requiredContent = [];
+foreach (['hero', 'intro', 'trabajos', 'ss_intro', 'ss_req', 'ss_obj', 'ss_mod', 'ss_pas', 'cta'] as $sectionField) {
+    $requiredContent[$sectionField.'_title'] = 'Título de prueba';
+    $requiredContent[$sectionField.'_content'] = 'Contenido de prueba';
+}
 $controller = new App\Http\Controllers\Admin\PreEgresadosPageAdminController();
 $count = 0;
 foreach ($fields as $field=>$key) {
@@ -32,7 +37,7 @@ foreach ($fields as $field=>$key) {
         $before = json_encode([$db->table('page_sections')->get(),$db->table('page_section_items')->get()]);
         $data = ['hero_title'=>'Must not save','trabajo_items'=>[$ids['trabajo_items']=>['title'=>'Must not save']],$field=>[$badId=>['title'=>'Must not save']]];
         try {
-            $controller->update(Illuminate\Http\Request::create('/', 'PUT', $data));
+            $controller->update(Illuminate\Http\Request::create('/', 'PUT', $data + $requiredContent));
             throw new RuntimeException('Invalid ID was accepted');
         } catch (Illuminate\Validation\ValidationException $e) {
             if (!isset($e->errors()[$field])) { throw $e; }
@@ -44,7 +49,7 @@ foreach ($fields as $field=>$key) {
 }
 $data = ['hero_title'=>'Updated'];
 foreach ($ids as $field=>$id) { $data[$field] = [$id=>['title'=>'Updated','status'=>1]]; }
-$controller->update(Illuminate\Http\Request::create('/', 'PUT', $data));
+$controller->update(Illuminate\Http\Request::create('/', 'PUT', $data + $requiredContent));
 foreach ($ids as $id) {
     if ($db->table('page_section_items')->where('id',$id)->value('title') !== 'Updated') { throw new RuntimeException('Valid update failed'); }
     $count++;

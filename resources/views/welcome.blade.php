@@ -10,7 +10,7 @@
             min-height: 100vh;
             display: grid;
             place-items: center;
-            font-family: "Sansation", "Esphimere", "Esphimere Bold";
+            font-family: "Esphimere", Arial, sans-serif;
             background: #f3f3f3;
             color: #050505;
         }

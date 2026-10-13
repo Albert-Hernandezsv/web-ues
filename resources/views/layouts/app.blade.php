@@ -28,5 +28,6 @@
                 {{ $slot }}
             </main>
         </div>
-    </body>
+    @include('partials.form-notifications')
+</body>
 </html>

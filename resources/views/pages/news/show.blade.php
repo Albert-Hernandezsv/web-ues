@@ -13,7 +13,7 @@
 
                     @if($news->published_at)
                         <p class="news-detail-date">
-                            {{ $news->published_at->format('d/m/Y') }}
+                            {{ $news->published_at->copy()->timezone(config('publication.timezone'))->format('d/m/Y') }}
                         </p>
                     @endif
 

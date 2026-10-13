@@ -67,17 +67,6 @@ class ProfileController extends Controller
 
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::logout();
-
-        $user = $request->user();
-
-        if ($user) {
-            $user->delete();
-        }
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/');
+        abort(403, 'Solicita al administrador la desactivación de tu cuenta.');
     }
 }

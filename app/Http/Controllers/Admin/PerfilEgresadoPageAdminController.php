@@ -33,45 +33,48 @@ class PerfilEgresadoPageAdminController extends Controller
         $page = Page::where('slug', 'perfil_egresado')->firstOrFail();
 
         $request->validate([
-            'hero_title' => ['nullable', 'string', 'max:255'],
-            'hero_subtitle' => ['nullable', 'string', 'max:255'],
-            'hero_content' => ['nullable', 'string'],
+            'hero_title' => ['required', 'string', 'max:80'],
+            'hero_subtitle' => ['nullable', 'string', 'max:80'],
+            'hero_content' => ['required', 'string'],
             'hero_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
 
-            'intro_title' => ['nullable', 'string', 'max:255'],
-            'intro_content' => ['nullable', 'string'],
+            'intro_title' => ['required', 'string', 'max:80'],
+            'intro_content' => ['required', 'string'],
 
-            'competencias_title' => ['nullable', 'string', 'max:255'],
-            'competencias_content' => ['nullable', 'string'],
+            'competencias_title' => ['required', 'string', 'max:80'],
+            'competencias_content' => ['required', 'string'],
 
-            'expectativas_title' => ['nullable', 'string', 'max:255'],
-            'expectativas_content' => ['nullable', 'string'],
+            'expectativas_title' => ['required', 'string', 'max:80'],
+            'expectativas_content' => ['required', 'string'],
 
-            'aspirante_title' => ['nullable', 'string', 'max:255'],
-            'aspirante_content' => ['nullable', 'string'],
+            'aspirante_title' => ['required', 'string', 'max:80'],
+            'aspirante_content' => ['required', 'string'],
 
-            'egresado_title' => ['nullable', 'string', 'max:255'],
-            'egresado_content' => ['nullable', 'string'],
+            'egresado_title' => ['required', 'string', 'max:80'],
+            'egresado_content' => ['required', 'string'],
             'egresado_button_text' => ['nullable', 'string', 'max:100'],
             'egresado_button_link' => ['nullable', 'string', 'max:255'],
 
             'competencia_items' => ['nullable', 'array'],
-            'competencia_items.*.title' => ['nullable', 'string', 'max:255'],
+            'competencia_items.*.title' => ['required_if:competencia_items.*.status,1', 'nullable', 'string', 'max:80'],
             'competencia_items.*.content' => ['nullable', 'string'],
             'competencia_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'competencia_items.*.status' => ['nullable', 'boolean'],
 
             'expectativa_items' => ['nullable', 'array'],
-            'expectativa_items.*.title' => ['nullable', 'string', 'max:255'],
+            'expectativa_items.*.title' => ['required_if:expectativa_items.*.status,1', 'nullable', 'string', 'max:80'],
             'expectativa_items.*.content' => ['nullable', 'string'],
             'expectativa_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'expectativa_items.*.status' => ['nullable', 'boolean'],
 
             'aspirante_items' => ['nullable', 'array'],
-            'aspirante_items.*.title' => ['nullable', 'string', 'max:255'],
+            'aspirante_items.*.title' => ['required_if:aspirante_items.*.status,1', 'nullable', 'string', 'max:80'],
             'aspirante_items.*.content' => ['nullable', 'string'],
             'aspirante_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'aspirante_items.*.status' => ['nullable', 'boolean'],
+        ], [
+            'required' => 'El campo :attribute es obligatorio.',
+            'required_if' => 'El campo :attribute es obligatorio cuando el elemento está activo.',
         ]);
 
         $hero = PageSection::where('page_id', $page->id)->where('section_key', 'perfil_hero')->firstOrFail();

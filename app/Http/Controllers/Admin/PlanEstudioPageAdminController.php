@@ -33,63 +33,66 @@ class PlanEstudioPageAdminController extends Controller
         $page = Page::where('slug', 'plan_estudio')->firstOrFail();
 
         $request->validate([
-            'hero_title' => ['nullable', 'string', 'max:255'],
-            'hero_subtitle' => ['nullable', 'string', 'max:255'],
-            'hero_content' => ['nullable', 'string'],
+            'hero_title' => ['required', 'string', 'max:80'],
+            'hero_subtitle' => ['nullable', 'string', 'max:80'],
+            'hero_content' => ['required', 'string'],
             'hero_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
 
-            'intro_title' => ['nullable', 'string', 'max:255'],
-            'intro_content' => ['nullable', 'string'],
+            'intro_title' => ['required', 'string', 'max:80'],
+            'intro_content' => ['required', 'string'],
 
-            'summary_title' => ['nullable', 'string', 'max:255'],
-            'summary_content' => ['nullable', 'string'],
+            'summary_title' => ['required', 'string', 'max:80'],
+            'summary_content' => ['required', 'string'],
             'summary_extra_1' => ['nullable', 'string', 'max:255'],
             'summary_extra_2' => ['nullable', 'string', 'max:255'],
-            'summary_subtitle' => ['nullable', 'string', 'max:255'],
+            'summary_subtitle' => ['nullable', 'string', 'max:80'],
 
-            'esp_intro_title' => ['nullable', 'string', 'max:255'],
-            'esp_intro_content' => ['nullable', 'string'],
+            'esp_intro_title' => ['required', 'string', 'max:80'],
+            'esp_intro_content' => ['required', 'string'],
 
-            'esp_mat_title' => ['nullable', 'string', 'max:255'],
-            'esp_mat_content' => ['nullable', 'string'],
+            'esp_mat_title' => ['required', 'string', 'max:80'],
+            'esp_mat_content' => ['required', 'string'],
 
-            'areas_title' => ['nullable', 'string', 'max:255'],
-            'areas_content' => ['nullable', 'string'],
+            'areas_title' => ['required', 'string', 'max:80'],
+            'areas_content' => ['required', 'string'],
 
-            'cycles_title' => ['nullable', 'string', 'max:255'],
-            'cycles_content' => ['nullable', 'string'],
+            'cycles_title' => ['required', 'string', 'max:80'],
+            'cycles_content' => ['required', 'string'],
 
-            'cta_title' => ['nullable', 'string', 'max:255'],
-            'cta_content' => ['nullable', 'string'],
+            'cta_title' => ['required', 'string', 'max:80'],
+            'cta_content' => ['required', 'string'],
             'cta_button_text' => ['nullable', 'string', 'max:100'],
             'cta_button_link' => ['nullable', 'string', 'max:255'],
 
             'esp_intro_items' => ['nullable', 'array'],
-            'esp_intro_items.*.title' => ['nullable', 'string', 'max:255'],
-            'esp_intro_items.*.subtitle' => ['nullable', 'string', 'max:255'],
+            'esp_intro_items.*.title' => ['required_if:esp_intro_items.*.status,1', 'nullable', 'string', 'max:80'],
+            'esp_intro_items.*.subtitle' => ['nullable', 'string', 'max:80'],
             'esp_intro_items.*.content' => ['nullable', 'string'],
             'esp_intro_images.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'esp_intro_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'esp_intro_items.*.status' => ['nullable', 'boolean'],
 
             'esp_mat_items' => ['nullable', 'array'],
-            'esp_mat_items.*.title' => ['nullable', 'string', 'max:255'],
-            'esp_mat_items.*.subtitle' => ['nullable', 'string', 'max:255'],
+            'esp_mat_items.*.title' => ['required_if:esp_mat_items.*.status,1', 'nullable', 'string', 'max:80'],
+            'esp_mat_items.*.subtitle' => ['nullable', 'string', 'max:80'],
             'esp_mat_items.*.content' => ['nullable', 'string'],
             'esp_mat_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'esp_mat_items.*.status' => ['nullable', 'boolean'],
 
             'area_items' => ['nullable', 'array'],
-            'area_items.*.title' => ['nullable', 'string', 'max:255'],
+            'area_items.*.title' => ['required_if:area_items.*.status,1', 'nullable', 'string', 'max:80'],
             'area_items.*.content' => ['nullable', 'string'],
             'area_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'area_items.*.status' => ['nullable', 'boolean'],
 
             'cycle_items' => ['nullable', 'array'],
-            'cycle_items.*.title' => ['nullable', 'string', 'max:255'],
+            'cycle_items.*.title' => ['required_if:cycle_items.*.status,1', 'nullable', 'string', 'max:80'],
             'cycle_items.*.content' => ['nullable', 'string'],
             'cycle_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'cycle_items.*.status' => ['nullable', 'boolean'],
+        ], [
+            'required' => 'El campo :attribute es obligatorio.',
+            'required_if' => 'El campo :attribute es obligatorio cuando el elemento está activo.',
         ]);
 
         $hero = PageSection::where('page_id', $page->id)->where('section_key', 'plan_hero')->firstOrFail();

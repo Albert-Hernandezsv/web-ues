@@ -28,11 +28,12 @@ class NewsAdminController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        \App\Support\PublicationAccess::authorize($request, 'news');
         $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:80', new \App\Rules\UsableSlug()],
             'summary' => ['nullable', 'string'],
             'content' => ['nullable', 'string'],
-            'published_at' => ['nullable', 'date'],
+            'published_at' => ['nullable', 'date_format:Y-m-d\\TH:i'],
             'status' => ['required', 'boolean'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
         ]);
@@ -47,7 +48,9 @@ class NewsAdminController extends Controller
 
         $news->summary = $validated['summary'] ?? null;
         $news->content = $validated['content'] ?? null;
-        $news->published_at = $validated['published_at'] ?? null;
+        $news->published_at = !empty($validated['published_at'])
+            ? \Carbon\Carbon::parse($validated['published_at'], config('publication.timezone'))->utc()
+            : null;
         $news->status = (bool) $validated['status'];
 
         if ($request->hasFile('image')) {
@@ -68,11 +71,12 @@ class NewsAdminController extends Controller
 
     public function update(Request $request, News $news): RedirectResponse
     {
+        \App\Support\PublicationAccess::authorize($request, 'news', $news);
         $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:80', new \App\Rules\UsableSlug()],
             'summary' => ['nullable', 'string'],
             'content' => ['nullable', 'string'],
-            'published_at' => ['nullable', 'date'],
+            'published_at' => ['nullable', 'date_format:Y-m-d\\TH:i'],
             'status' => ['required', 'boolean'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
         ]);
@@ -87,7 +91,9 @@ class NewsAdminController extends Controller
         $news->slug = $newSlug;
         $news->summary = $validated['summary'] ?? null;
         $news->content = $validated['content'] ?? null;
-        $news->published_at = $validated['published_at'] ?? null;
+        $news->published_at = !empty($validated['published_at'])
+            ? \Carbon\Carbon::parse($validated['published_at'], config('publication.timezone'))->utc()
+            : null;
         $news->status = (bool) $validated['status'];
 
         if ($request->hasFile('image')) {

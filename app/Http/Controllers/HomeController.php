@@ -25,8 +25,7 @@ class HomeController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        $news = News::where('status', true)
-            ->whereNotNull('published_at')
+        $news = News::published()
             ->orderByDesc('published_at')
             ->take(5)
             ->get();

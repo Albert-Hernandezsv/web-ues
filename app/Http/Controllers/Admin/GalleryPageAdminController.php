@@ -29,12 +29,15 @@ class GalleryPageAdminController extends Controller
         $page = Page::where('slug', 'galeria')->firstOrFail();
 
         $request->validate([
-            'hero_title' => ['nullable', 'string', 'max:255'],
-            'hero_subtitle' => ['nullable', 'string', 'max:255'],
-            'hero_content' => ['nullable', 'string'],
+            'hero_title' => ['required', 'string', 'max:80'],
+            'hero_subtitle' => ['nullable', 'string', 'max:80'],
+            'hero_content' => ['required', 'string'],
             'hero_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'intro_title' => ['nullable', 'string', 'max:255'],
-            'intro_content' => ['nullable', 'string'],
+            'intro_title' => ['required', 'string', 'max:80'],
+            'intro_content' => ['required', 'string'],
+        ], [
+            'required' => 'El campo :attribute es obligatorio.',
+            'required_if' => 'El campo :attribute es obligatorio cuando el elemento está activo.',
         ]);
 
         $hero = PageSection::where('page_id', $page->id)->where('section_key', 'gallery_hero')->firstOrFail();

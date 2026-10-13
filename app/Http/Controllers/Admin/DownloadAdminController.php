@@ -27,8 +27,9 @@ class DownloadAdminController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        \App\Support\PublicationAccess::authorize($request, 'downloads');
         $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:80'],
             'description' => ['nullable', 'string'],
             'sort_order' => ['required', 'integer', 'min:1'],
             'status' => ['required', 'boolean'],
@@ -66,8 +67,9 @@ class DownloadAdminController extends Controller
 
     public function update(Request $request, Download $download): RedirectResponse
     {
+        \App\Support\PublicationAccess::authorize($request, 'downloads', $download);
         $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:80'],
             'description' => ['nullable', 'string'],
             'sort_order' => ['required', 'integer', 'min:1'],
             'status' => ['required', 'boolean'],

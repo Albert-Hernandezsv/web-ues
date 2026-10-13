@@ -5,20 +5,16 @@
                 Administrar noticias
             </h2>
 
-            <a href="{{ route('admin.news.create') }}"
+            @can('news.create')<a href="{{ route('admin.news.create') }}"
                class="rounded-xl bg-blue-600 px-5 py-2.5 font-semibold text-white hover:bg-blue-700 transition">
                 Nueva noticia
-            </a>
+            </a>@endcan
         </div>
     </x-slot>
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if(session('success'))
-                <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-green-700">
-                    {{ session('success') }}
-                </div>
-            @endif
+
 
             <div class="bg-white shadow rounded-2xl overflow-hidden">
                 <div class="overflow-x-auto">
@@ -39,7 +35,7 @@
                                         <div class="text-sm text-slate-500">{{ $item->slug }}</div>
                                     </td>
                                     <td class="px-4 py-4 text-sm text-slate-700">
-                                        {{ $item->published_at?->format('d/m/Y H:i') ?? 'Sin fecha' }}
+                                        {{ $item->published_at?->copy()->timezone(config('publication.timezone'))->format('d/m/Y H:i') ?? 'Sin fecha' }}
                                     </td>
                                     <td class="px-4 py-4 text-sm">
                                         @if($item->status)
@@ -51,16 +47,15 @@
                                     <td class="px-4 py-4">
                                         <div class="flex items-center justify-end gap-3">
                                             <a href="{{ route('admin.news.edit', $item) }}" class="text-blue-600 font-semibold hover:underline">
-                                                Editar
-                                            </a>
+                                                Consultar / editar </a>
 
-                                            <form action="{{ route('admin.news.destroy', $item) }}" method="POST" onsubmit="return confirm('¿Eliminar esta noticia?');">
+                                            @can('news.delete')<form action="{{ route('admin.news.destroy', $item) }}" method="POST" data-confirm="¿Eliminar esta noticia?" onsubmit="return confirm('¿Eliminar esta noticia?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-red-600 font-semibold hover:underline">
                                                     Eliminar
                                                 </button>
-                                            </form>
+                                            </form>@endcan
                                         </div>
                                     </td>
                                 </tr>

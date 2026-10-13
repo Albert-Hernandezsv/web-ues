@@ -60,7 +60,7 @@
                             <div class="news-page-card-body">
                                 @if($item->published_at)
                                     <span class="news-page-date">
-                                        {{ $item->published_at->format('d/m/Y') }}
+                                        {{ $item->published_at->copy()->timezone(config('publication.timezone'))->format('d/m/Y') }}
                                     </span>
                                 @endif
 

@@ -29,28 +29,31 @@ class ContactoPageAdminController extends Controller
         $page = Page::where('slug', 'contacto')->firstOrFail();
 
         $request->validate([
-            'hero_title' => ['nullable', 'string', 'max:255'],
-            'hero_subtitle' => ['nullable', 'string', 'max:255'],
-            'hero_content' => ['nullable', 'string'],
+            'hero_title' => ['required', 'string', 'max:80'],
+            'hero_subtitle' => ['nullable', 'string', 'max:80'],
+            'hero_content' => ['required', 'string'],
             'hero_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
 
-            'info_title' => ['nullable', 'string', 'max:255'],
-            'info_content' => ['nullable', 'string'],
+            'info_title' => ['required', 'string', 'max:80'],
+            'info_content' => ['required', 'string'],
             'info_phone' => ['nullable', 'string', 'max:255'],
             'info_email' => ['nullable', 'string', 'max:255'],
 
-            'social_title' => ['nullable', 'string', 'max:255'],
-            'social_content' => ['nullable', 'string'],
+            'social_title' => ['required', 'string', 'max:80'],
+            'social_content' => ['required', 'string'],
             'social_button_text' => ['nullable', 'string', 'max:100'],
             'social_button_link' => ['nullable', 'string', 'max:255'],
 
-            'maps_title' => ['nullable', 'string', 'max:255'],
-            'maps_content' => ['nullable', 'string'],
+            'maps_title' => ['required', 'string', 'max:80'],
+            'maps_content' => ['required', 'string'],
             'maps_button_text' => ['nullable', 'string', 'max:100'],
             'maps_button_link' => ['nullable', 'string', 'max:1000'],
 
-            'cta_title' => ['nullable', 'string', 'max:255'],
-            'cta_content' => ['nullable', 'string'],
+            'cta_title' => ['required', 'string', 'max:80'],
+            'cta_content' => ['required', 'string'],
+        ], [
+            'required' => 'El campo :attribute es obligatorio.',
+            'required_if' => 'El campo :attribute es obligatorio cuando el elemento está activo.',
         ]);
 
         $hero = PageSection::where('page_id', $page->id)->where('section_key', 'contacto_hero')->firstOrFail();

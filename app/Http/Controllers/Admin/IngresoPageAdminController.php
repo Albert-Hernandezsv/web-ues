@@ -33,33 +33,36 @@ class IngresoPageAdminController extends Controller
         $page = Page::where('slug', 'ingreso')->firstOrFail();
 
         $request->validate([
-            'hero_title' => ['nullable', 'string', 'max:255'],
-            'hero_subtitle' => ['nullable', 'string', 'max:255'],
-            'hero_content' => ['nullable', 'string'],
+            'hero_title' => ['required', 'string', 'max:80'],
+            'hero_subtitle' => ['nullable', 'string', 'max:80'],
+            'hero_content' => ['required', 'string'],
             'hero_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
 
-            'periodo_title' => ['nullable', 'string', 'max:255'],
-            'periodo_content' => ['nullable', 'string'],
+            'periodo_title' => ['required', 'string', 'max:80'],
+            'periodo_content' => ['required', 'string'],
             'periodo_extra_1' => ['nullable', 'string', 'max:255'],
 
-            'steps_title' => ['nullable', 'string', 'max:255'],
-            'steps_content' => ['nullable', 'string'],
+            'steps_title' => ['required', 'string', 'max:80'],
+            'steps_content' => ['required', 'string'],
 
-            'recordatorio_title' => ['nullable', 'string', 'max:255'],
-            'recordatorio_content' => ['nullable', 'string'],
+            'recordatorio_title' => ['required', 'string', 'max:80'],
+            'recordatorio_content' => ['required', 'string'],
 
-            'contacto_title' => ['nullable', 'string', 'max:255'],
-            'contacto_content' => ['nullable', 'string'],
+            'contacto_title' => ['required', 'string', 'max:80'],
+            'contacto_content' => ['required', 'string'],
             'contacto_button_text' => ['nullable', 'string', 'max:100'],
             'contacto_button_link' => ['nullable', 'string', 'max:255'],
             'contacto_extra_1' => ['nullable', 'string', 'max:255'],
 
             'steps_items' => ['nullable', 'array'],
-            'steps_items.*.title' => ['nullable', 'string', 'max:255'],
+            'steps_items.*.title' => ['required_if:steps_items.*.status,1', 'nullable', 'string', 'max:80'],
             'steps_items.*.content' => ['nullable', 'string'],
             'steps_items.*.link' => ['nullable', 'string', 'max:255'],
             'steps_items.*.sort_order' => ['nullable', 'integer', 'min:1'],
             'steps_items.*.status' => ['nullable', 'boolean'],
+        ], [
+            'required' => 'El campo :attribute es obligatorio.',
+            'required_if' => 'El campo :attribute es obligatorio cuando el elemento está activo.',
         ]);
 
         $hero = PageSection::where('page_id', $page->id)->where('section_key', 'ingreso_hero')->firstOrFail();

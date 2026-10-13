@@ -1,3 +1,6 @@
+import './required-page-fields';
+import './form-notifications';
+import './title-limits';
 import './bootstrap';
 
 import Alpine from 'alpinejs';

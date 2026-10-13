@@ -3,3 +3,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Editorial title limits and resilient public headings. */
+.title-field { min-width: 0; }
+.title-counter { margin-top: .25rem; font-size: .75rem; color: #4b5563; }
+.title-counter-error { color: #b91c1c; font-weight: 600; }
+.public-main { overflow-wrap: anywhere; }
+.public-main :is(h1, h2, h3, h4, h5, h6, [class*="title"]) {
+    overflow-wrap: anywhere;
+    white-space: normal;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.ues-dialog { border-radius:1.25rem !important; border-top:6px solid #1e3a5f; box-shadow:0 24px 80px #0f172a40; }
+.ues-dialog-title { color:#1e3a5f !important; }
+.ues-dialog-content { white-space:pre-line; overflow-wrap:anywhere; max-height:50vh; overflow-y:auto; }
+.ues-dialog button { border-radius:.65rem !important; font-weight:600 !important; }
+.ues-notices { position:fixed; top:1rem; right:1rem; z-index:100; max-width:min(32rem,90vw); }
+.ues-notice { padding:1rem; margin-bottom:.5rem; border:2px solid #1e3a5f; border-radius:.75rem; background:white; box-shadow:0 8px 30px #0f172a30; white-space:pre-line; }
+.ues-notice--error { border-color:#b91c1c; }
+.ues-notice--success { border-color:#15803d; }

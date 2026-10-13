@@ -22,11 +22,14 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\Admin\GalleryPageAdminController;
 use App\Http\Controllers\Admin\GalleryAdminController;
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'auth.session', 'panel.access'])->group(function () {
 
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::resource('/gestionar-usuarios', \App\Http\Controllers\Admin\UserAdminController::class)
+        ->parameters(['gestionar-usuarios'=>'user'])->names('admin.users')->only(['index','create','store','edit','update']);
 
     // Gestión de Perfil
     Route::get('/gestionar-usuario', [ProfileController::class, 'edit'])->name('profile.edit');

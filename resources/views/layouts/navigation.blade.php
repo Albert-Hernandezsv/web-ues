@@ -35,9 +35,10 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            Mi perfil
                         </x-dropdown-link>
 
+                        @can('users.manage')<x-dropdown-link :href="route('admin.users.index')">Gestión de usuarios</x-dropdown-link>@endcan
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -81,7 +82,7 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    Mi perfil
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->

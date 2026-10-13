@@ -28,13 +28,14 @@ class AlumniAdminController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        \App\Support\PublicationAccess::authorize($request, 'alumnis');
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:150'],
+            'name' => ['required', 'string', 'max:150', new \App\Rules\UsableSlug()],
             'headline' => ['nullable', 'string', 'max:255'],
             'company' => ['nullable', 'string', 'max:255'],
             'summary' => ['nullable', 'string'],
             'content' => ['nullable', 'string'],
-            'published_at' => ['nullable', 'date'],
+            'published_at' => ['nullable', 'date_format:Y-m-d\\TH:i'],
             'status' => ['required', 'boolean'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
         ]);
@@ -51,7 +52,9 @@ class AlumniAdminController extends Controller
         $alumni->company = $validated['company'] ?? null;
         $alumni->summary = $validated['summary'] ?? null;
         $alumni->content = $validated['content'] ?? null;
-        $alumni->published_at = $validated['published_at'] ?? null;
+        $alumni->published_at = !empty($validated['published_at'])
+            ? \Carbon\Carbon::parse($validated['published_at'], config('publication.timezone'))->utc()
+            : null;
         $alumni->status = (bool) $validated['status'];
 
         if ($request->hasFile('image')) {
@@ -72,13 +75,14 @@ class AlumniAdminController extends Controller
 
     public function update(Request $request, Alumni $alumni): RedirectResponse
     {
+        \App\Support\PublicationAccess::authorize($request, 'alumnis', $alumni);
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:150'],
+            'name' => ['required', 'string', 'max:150', new \App\Rules\UsableSlug()],
             'headline' => ['nullable', 'string', 'max:255'],
             'company' => ['nullable', 'string', 'max:255'],
             'summary' => ['nullable', 'string'],
             'content' => ['nullable', 'string'],
-            'published_at' => ['nullable', 'date'],
+            'published_at' => ['nullable', 'date_format:Y-m-d\\TH:i'],
             'status' => ['required', 'boolean'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
         ]);
@@ -95,7 +99,9 @@ class AlumniAdminController extends Controller
         $alumni->company = $validated['company'] ?? null;
         $alumni->summary = $validated['summary'] ?? null;
         $alumni->content = $validated['content'] ?? null;
-        $alumni->published_at = $validated['published_at'] ?? null;
+        $alumni->published_at = !empty($validated['published_at'])
+            ? \Carbon\Carbon::parse($validated['published_at'], config('publication.timezone'))->utc()
+            : null;
         $alumni->status = (bool) $validated['status'];
 
         if ($request->hasFile('image')) {

@@ -44,6 +44,17 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
+            'permissions' => 'array',
         ];
+    }
+    public function hasPermission(string $permission): bool
+    {
+        if (!$this->is_active) return false;
+        if ($this->role === 'admin') return true;
+        if ($this->role !== 'editor') return false;
+        $module = substr($permission, 0, strrpos($permission, '.'));
+        return in_array($permission, $this->permissions ?? [], true)
+            && in_array($module.'.view', $this->permissions ?? [], true);
     }
 }
